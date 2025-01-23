@@ -1,0 +1,49 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "赣服通",
+		"navigationBarBackgroundColor": "#FF6B6B",
+		"navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/hall/hall",
+      "style": {
+        "navigationBarTitleText": "实体大厅"
+      }
+    },
+    {
+      "path": "pages/my/my",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#e54d42",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+        // "iconPath": "static/tabbar/home.png",
+        // "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/hall/hall",
+        "text": "大厅"
+        // "iconPath": "static/tabbar/hall.png",
+        // "selectedIconPath": "static/tabbar/hall-active.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我的"
+        // "iconPath": "static/tabbar/mine.png",
+        // "selectedIconPath": "static/tabbar/mine-active.png"
+      }
+    ]
+  }
+}
