@@ -1,0 +1,51 @@
+server:
+  port: 30222
+spring:
+  application:
+    name: xl-gateway
+  cloud:
+    nacos:
+      server-addr: 192.168.93.135:8848 # 注册Nacos地址
+      config:
+        server-addr: 192.168.93.135:8848  # Nacos配置地址，可忽略
+      discovery:
+        cluster-name: CS
+        namespace: be3c27a4-7d8a-4723-8de5-40e17ac2d4af # 命名空间，填ID
+#gateway
+    gateway:
+      globalcors:  #全局跨域处理
+        add-to-simple-url-handler-mapping: true  #解决options请求（浏览器询问服务器是否可以跨域的请求）被拦截的问题
+        corsConfigurations:
+          '[/**]':  #拦截一切请求
+            allowedHeaders: "*" #允许在请求头中携带的头部信息
+#            allowedOriginPatterns: "*"
+            allowedOrigins:  #允许哪些网站的跨域请求，"*"表示所有网站
+              - "http://localhost:8080"
+              - "http://127.0.0.1:8080"
+            allowedMethods:  #允许跨ajax的请求方式
+              - GET
+              - POST
+              - DELETE
+              - PUT
+              - OPTION
+            allowCredentials: true  #是否允许携带cookie
+            maxAge: 360000  #有效期内，浏览器不再发起询问是否可以跨域请求，直接放行，避免每次都发起询问损耗性能
+      routes:  # 网关路由配置
+        - id: identitybusiness  #路由ID，自定义，唯一即可
+          uri: lb://fintech-service-identitybusiness  #lb-负载均衡，后面跟服务名称
+          predicates:  #路由断言，判断请求是否符合路由规则
+            - Path=/api/identitybusiness/**
+          filters:
+            - StripPrefix= 1  #去掉上面路径的第一个前缀,/api/book-->/book
+        - id: sp
+          uri: lb://fintech-service-sp
+          predicates:
+            - Path=/api/sp/**
+          filters:
+            - StripPrefix= 1
+      default-filters:  #给所有服务添加过滤器,优先级：default-filters>路由过滤器>gloalFilters
+        - AddRequestHeader=aa,bb
+  # 从nacos导入配置，
+  config:
+    import:
+      - optional:nacos:xl-gateway.yaml?group=DEFAULT_GROUP&refreshEnabled=true  #配置热更新

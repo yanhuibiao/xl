@@ -16,7 +16,7 @@ target/
 ### IntelliJ IDEA ###
 .idea
 *.iws
-*.iml
+#*.iml
 *.ipr
 
 ### NetBeans ###
@@ -36,7 +36,6 @@ build/
 *.class
 #忽略所有.log文件
 *.log
-#忽略所有.idea目录下的文件
-.idea/
+
 
 
