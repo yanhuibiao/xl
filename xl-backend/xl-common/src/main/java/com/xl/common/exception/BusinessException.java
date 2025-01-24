@@ -1,12 +1,12 @@
 package com.xl.common.exception;
 
-import com.yanhuiby.common.enums.ResponseCodeEnum;
+import com.xl.common.enums.ResponseCodeEnum;
 
 public class BusinessException extends RuntimeException {
 
     public ResponseCodeEnum responseCodeEnum;
 
-//    无参构造器可以啥都不用写
+//    无参构造器
     public BusinessException(){
     }
 

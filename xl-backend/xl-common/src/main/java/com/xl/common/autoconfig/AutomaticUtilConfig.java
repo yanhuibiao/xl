@@ -1,7 +1,7 @@
 package com.xl.common.autoconfig;
 
-import com.yanhuiby.common.autoconfig.properties.JwtProperties;
-import com.yanhuiby.common.autoconfig.template.JwtUtils;
+import com.xl.common.autoconfig.properties.JwtProperties;
+import com.xl.common.autoconfig.template.JwtUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;

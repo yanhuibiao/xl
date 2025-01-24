@@ -1,7 +1,7 @@
 package com.xl.common.exception;
 
-import com.yanhuiby.common.dto.ResponseResult;
-import com.yanhuiby.common.enums.ResponseCodeEnum;
+import com.xl.common.dto.ResponseResult;
+import com.xl.common.enums.ResponseCodeEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

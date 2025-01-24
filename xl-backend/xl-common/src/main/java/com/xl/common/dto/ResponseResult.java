@@ -1,7 +1,7 @@
 package com.xl.common.dto;
 
 
-import com.yanhuiby.common.enums.ResponseCodeEnum;
+import com.xl.common.enums.ResponseCodeEnum;
 
 import java.io.Serializable;
 

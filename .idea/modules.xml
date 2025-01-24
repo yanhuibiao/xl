@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/xl-backend/xl-backend.iml" filepath="$PROJECT_DIR$/xl-backend/xl-backend.iml" />
       <module fileurl="file://$PROJECT_DIR$/xl-backend/xl-common/xl-common.iml" filepath="$PROJECT_DIR$/xl-backend/xl-common/xl-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/xl-backend/xl-gateway/xl-gateway.iml" filepath="$PROJECT_DIR$/xl-backend/xl-gateway/xl-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xl-backend/xl-identitybusiness/xl-identitybusiness.iml" filepath="$PROJECT_DIR$/xl-backend/xl-identitybusiness/xl-identitybusiness.iml" />
     </modules>
   </component>
 </project>

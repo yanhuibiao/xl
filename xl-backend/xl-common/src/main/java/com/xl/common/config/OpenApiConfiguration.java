@@ -72,11 +72,11 @@ public class OpenApiConfiguration {
 
     @Bean
     public OpenAPI springDocOpenAPI() {
-        return new OpenAPI().info(new Info().title("Fintech API")
-                .description("Fintech接口文档说明").version("v1.0.0-SNAPSHOT")
-                .license(new License().name("fintech").url("https://gitee.com/yanhuibiao/fintech")))
-                .externalDocs(new ExternalDocumentation().description("fintech")
-                .url("https://gitee.com/yanhuibiao/fintech/wikis"));
+        return new OpenAPI().info(new Info().title("Xl API")
+                .description("Xl接口文档说明").version("v1.0.0-SNAPSHOT")
+                .license(new License().name("xl").url("https://gitee.com/yanhuibiao/xl")))
+                .externalDocs(new ExternalDocumentation().description("xl")
+                .url("https://gitee.com/yanhuibiao/xl/wikis"));
     }
 // 分组
 //    @Bean

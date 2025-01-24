@@ -6,6 +6,7 @@
     <modules>
         <module>xl-gateway</module>
         <module>xl-common</module>
+        <module>xl-identitybusiness</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -8,5 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(value = "timeout.jwt-token",ignoreInvalidFields = true)
 public class JwtProperties {
     int sessionTimeout = 30;
-    String secret = "fintech";
+    String secret = "xl";
 }
