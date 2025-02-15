@@ -7,6 +7,8 @@
         <module>xl-gateway</module>
         <module>xl-common</module>
         <module>xl-identitybusiness</module>
+        <module>xl-deploy</module>
+        <module>xl-transaction</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -83,10 +85,10 @@
 
     <dependencies>
         <!-- 日志处理包 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-log4j2</artifactId>-->
+<!--        </dependency>-->
         <!--  lombok  -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -95,12 +97,12 @@
             <scope>provided</scope>
             <!--            spring test-->
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring.boot.version}</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-test</artifactId>-->
+<!--            <version>${spring.boot.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
 <!--	管理maven依赖版本，不会导入-->
@@ -176,7 +178,7 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring.boot.data.version}</version>
             </dependency>
-            <!--              redis依赖commons-pool 这个依赖一定要添加.spring-boot-dependencies里有  -->
+            <!--              redis依赖commons-pool，这个依赖一定要添加.spring-boot-dependencies里有  -->
             <!--            <dependency>-->
             <!--                <groupId>org.apache.commons</groupId>-->
             <!--                <artifactId>commons-pool2</artifactId>-->
@@ -191,7 +193,9 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--             spring cloud alibaba,nacos -->
+            <!--            spring cloud alibaba,包含nacos     -->
+            <!--            <groupId>com.alibaba.nacos</groupId>-->
+            <!--            <artifactId>nacos-client</artifactId>-->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>

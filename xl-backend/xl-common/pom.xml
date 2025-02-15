@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>xl-common</artifactId>
-    <packaging>pom</packaging>
+<!--    <packaging>jar</packaging>-->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -20,12 +20,28 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+<!--        aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+<!--        Nacos 依赖-->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId><!-- 确保使用合适的版本 -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>test</scope>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.alibaba.cloud</groupId>-->
@@ -51,10 +67,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-web</artifactId>-->
+<!--        </dependency>-->
         <!-- json-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -65,6 +82,11 @@
 <!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
 <!--        </dependency>-->
         <!--swagger-->
+<!--解决Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -77,5 +99,29 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
+<!--        非Spring Boot模块，并且希望其他Spring Boot或Spring项目能够使用这个common模块中的自动装配的bean-->
+<!--        手动加载 application.yml 配置-->
+<!--        <dependency>-->
+<!--            <groupId>org.yaml</groupId>-->
+<!--            <artifactId>snakeyaml</artifactId>-->
+<!--        </dependency>-->
+
+<!--        为了能够使用 Spring Boot 的自动配置机制，需要确保 common 模块中引入了 spring-boot-starter 相关依赖（即使 common 模块本身不是 Spring Boot 项目）-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
     </dependencies>
+
+    <build>
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--            </resource>-->
+<!--        </resources>-->
+    </build>
 </project>
