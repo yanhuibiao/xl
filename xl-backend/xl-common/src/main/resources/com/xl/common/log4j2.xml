@@ -164,26 +164,29 @@
     <loggers>
         <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
         <!--若是additivity设为false，则子Logger只会在自己的appender里输出，而不会在父Logger的appender里输出。-->
-        <logger name="org.mybatis" level="info" additivity="false">
+        <logger name="org.mybatis" level="error" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
         </logger>
-        <Logger name="org.springframework" level="info" additivity="false">
+        <logger name="org.alibaba" level="error" additivity="false">
+            <AppenderRef ref="ConsoleAsync"/>
+        </logger>
+        <Logger name="org.springframework" level="error" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
         </Logger>
-        <Logger name="com.xl.identitybusiness" level="info" additivity="false">
+        <Logger name="com.xl.identitybusiness" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
             <AppenderRef ref="identitybusinessAsync"/>
         </Logger>
-        <Logger name="com.xl.transaction" level="info" additivity="false">
+        <Logger name="com.xl.transaction" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
             <AppenderRef ref="transactionAsync"/>
         </Logger>
-        <Logger name="com.xl.common" level="info" additivity="false">
+        <Logger name="com.xl.common" level="error" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
             <AppenderRef ref="commonAsync"/>
         </Logger>
         <!--root节点用来指定项目的根日志，level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.-->
-        <root level="info">
+        <root level="debug">
             <AppenderRef ref="ConsoleAsync" />
         </root>
     </loggers>

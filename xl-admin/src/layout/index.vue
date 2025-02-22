@@ -14,10 +14,10 @@
         <div class="right-menu">
           <el-dropdown class="avatar-container" trigger="click">
             <div class="avatar-wrapper">
-              <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+              <img :src="avatar+'?imageView2/1/w/80/h/80'" class="userMapper-avatar">
               <i class="el-icon-caret-bottom" style="color:#ffffff;" />
             </div>
-            <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <el-dropdown-menu slot="dropdown" class="userMapper-dropdown">
               <router-link to="/">
                 <el-dropdown-item>
                   首页
@@ -118,7 +118,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
+      await this.$store.dispatch('userMapper/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
@@ -224,7 +224,7 @@ export default {
         margin-top: 5px;
         position: relative;
 
-        .user-avatar {
+        .userMapper-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;

@@ -4,10 +4,10 @@ package com.xl.common.enums;
 public enum ResponseCodeEnum {
 
     // Operation successful
-    SUCCESS(200,"Operation Successful"),
+    SUCCESS(200,"Operation successful"),
     // Login、Session段1~50
     NEED_LOGIN(50,"Login Again Please"),
-    LOGIN_FAILED(51,"Incorrect Username Or Password"),
+    LOGIN_FAILED(51,"Incorrect username or password"),
     TOKEN_INVALID(52,"Invalid Session"),
     TOKEN_EXPIRE(53,"Session Has Expired"),
     TOKEN_REQUIRE(54,"Token Is Mandatory"),

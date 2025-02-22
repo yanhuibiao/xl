@@ -1,46 +1,49 @@
+xl:
+  db: /xl_users
 server:
-  port: 28081
+  port: 18081
   servlet:
     context-path: /identitybusiness
 spring:
   application:
     name: xl-identitybusiness # 服务名称
   config:
-    import: classpath:application-common.yml    # 导入common模块的配置
-#  cloud:
-#    nacos:
-#      server-addr: 192.168.93.135:8848 # 注册Nacos地址
-#      config:
-#        server-addr: 192.168.93.135:8848  # Nacos地址，可忽略
-#      # file-extension: yaml # 配置文件后缀名
-#      # ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
-#      discovery:
-#        cluster-name: CS
-#        namespace: be3c27a4-7d8a-4723-8de5-40e17ac2d4af # 命名空间，填ID
-#2021.0.5版本的 Spring Cloud 默认不再启用 bootstrap包
-#  config:
-#    import:
-#      - optional:nacos:fintech-service-identitybusiness.yaml?group=DEFAULT_GROUP&refreshEnabled=true
-# dubbo注册地址
-#dubbo:
-#  protocol:
-#    name: dubbo
-#    port: 20880
-#  registry:
-#    address: nacos://192.168.93.135:8848
-#    use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
-#  #    address: spring-cloud://localhost   #使用spring cloud中的注册中心
-#  scan:
-#    base-packages: com.fintech.service.identitybusiness.service
-#  consumer:
-#    check: false
-#  application:   #Qos=Quality of Service，qos是Dubbo的在线运维命令，可以对服务进行动态的配置、控制及查询
-#    qos-enable: false    #是否启动QoS
-#    serialize-check-status: WARN
+    import:
+      - classpath:application-common.yml  # 导入common模块yml的配置
+      - optional:nacos:xl-identitybusiness.yaml?group=DEFAULT_GROUP&refreshEnabled=true
+  cloud:
+    nacos:
+      server-addr: 192.168.93.135:8848 # 注册Nacos地址，其他服务可以发现自己
+      config:
+        server-addr: 192.168.93.135:8848  # 读取Nacos配置的地址，可忽略
+#      # file-extension: yaml # 配置文件后缀名 这里会从${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
+      discovery:  #从nacos中心查找其他服务
+        cluster-name: CS  # 集群名称
+        namespace: c175d688-72cb-4c61-8400-7f50c29346e0 # 命名空间，填ID
+dubbo:
+  protocol:
+    name: dubbo
+    port: 20881
+  registry:
+    address: nacos://192.168.93.135:8848    # dubbo注册地址，其他服务可以发现自己,dubbo只需注册无需发现
+    use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
+    cluster:
+  scan:
+    base-packages: com.xl.identitybusiness.service
+  consumer:
+    check: false  #启动检查
+    timeout: 3000   #超时时间
+    retries: 3    #重试次数
+  application:   #Qos=Quality of Service，qos是Dubbo的在线运维命令，可以对服务进行动态的配置、控制及查询
+    qos-enable: false    #是否启动QoS
+    serialize-check-status: WARN
 #    check-serializable: false
-#    qos-port: 2222    #启动QoS绑定的端口
+#    qos-port: 22224    #启动QoS绑定的端口
 #    qos-accept-foreign-ip: false    #是否允许远程访问
 #  provider:  # 重写dubbo ExceptionFilter并生效
 #    filter: customExceptionFilter,-exception
-
+mybatis-plus:
+  mapper-locations: classpath:com/xl/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 

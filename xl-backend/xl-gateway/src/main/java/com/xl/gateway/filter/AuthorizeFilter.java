@@ -1,0 +1,69 @@
+package com.xl.gateway.filter;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xl.common.utils.JwtUtils;
+import com.xl.common.dto.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+@Order(-1)
+@Component
+public class AuthorizeFilter implements GlobalFilter {
+
+    @Autowired
+    JwtUtils jwtUtils;
+    /**
+     *
+     * @param exchange 从上下文获取数据
+     * @param chain 放行下个过滤器
+     * @return
+     */
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        //0.判断是否登录接口,是的话直接放行
+        String url = exchange.getRequest().getURI().getPath();
+        if (url.contains("/login")){
+            return chain.filter(exchange);
+        }
+        // 1.获取请求参数
+        ServerHttpRequest request = exchange.getRequest();
+        MultiValueMap<String, String> headers = request.getHeaders();
+        // 2.获取参数值
+        String token = headers.getFirst("X-Token");
+        // 3.对参数判断
+        boolean islogin = jwtUtils.verifyToken(token);
+        if (islogin){
+            //4.为true就放行
+            return chain.filter(exchange);
+        }
+        // 5.为false，设置状态码,拦截
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+//        return response.setComplete();
+
+//        下面是自己设置响应data
+        response.getHeaders().add("Content-Type","application/json");
+        DataBufferFactory bufferFactory = response.bufferFactory();
+        ObjectMapper objectMapper = new ObjectMapper();
+        DataBuffer wrap = null;
+        try {
+            wrap = bufferFactory.wrap(objectMapper.writeValueAsBytes(ResponseResult.errorResult(401,"会话超时")));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        DataBuffer finalWrap = wrap;
+        return response.writeWith(Mono.fromSupplier(() -> finalWrap));
+    }
+}

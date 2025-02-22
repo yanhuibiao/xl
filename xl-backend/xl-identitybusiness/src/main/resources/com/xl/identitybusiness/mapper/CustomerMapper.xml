@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xl.identitybusiness.mapper.CustomerMapper">
+
+    <resultMap id="customerResultMap" type="com.xl.common.dubbo.dao.Customer">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="gender"/>
+        <result column="security_credential" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="status" property="status"/>
+        <result column="account_id" property="accountId"/>
+        <result column="identity_type" property="identityType"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_update_time" property="lastUpdateTime"/>
+    </resultMap>
+
+    <insert id="mybatisSave" useGeneratedKeys="true" keyProperty="id">
+        insert into xl_users.customer (id,username,security_credential)
+        values (#{customer.id},#{customer.username},#{customer.password})
+    </insert>
+
+    <insert id="mybatisSave1" useGeneratedKeys="true" keyProperty="id">
+        insert into xl_users.customer (id,username,security_credential)
+        values (#{id},#{username},#{password})
+    </insert>
+
+    <select id="findCustomer" resultMap="customerResultMap">
+        SELECT * FROM xl_users.customer
+        <where>
+            <if test="user.id != null">
+                AND id like CONCAT('%', #{user.id}, '%')
+            </if>
+            <if test="user.username != null">
+                AND username like CONCAT('%', #{user.username}, '%')
+            </if>
+            <if test="user.age != null">
+                AND age like CONCAT('%', #{user.age}, '%')
+            </if>
+            <if test="user.gender != null">
+                AND sex like CONCAT('%', #{user.gender}, '%')
+            </if>
+            <if test="user.phone != null">
+                AND phone like CONCAT('%', #{user.phone}, '%')
+            </if>
+            <if test="user.status != null">
+                AND status = #{user.status}
+            </if>
+            <if test="create_time1 != null and  create_time2 != null">
+                AND status between #{create_time1}  and #{create_time2}
+            </if>
+            <if test="update_time1 != null and update_time2 != null">
+                AND status between #{update_time1}  and #{update_time2}
+            </if>
+        </where>
+    </select>
+</mapper>

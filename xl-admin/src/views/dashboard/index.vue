@@ -30,7 +30,7 @@
         <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
           <div class="card-panel">
             <div class="card-panel-icon-wrapper icon-people">
-              <i class="el-icon-user-solid" />
+              <i class="el-icon-userMapper-solid" />
             </div>
             <div class="card-panel-description">
               <div class="card-panel-text">

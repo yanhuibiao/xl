@@ -15,12 +15,10 @@ import org.springframework.context.annotation.ComponentScan;
         HibernateJpaAutoConfiguration.class,
 //        RedisConfig.class
 })
-//@ComponentScan({
-////        "com.xl.common.autoconfig",
-//        "com.xl.gateway"
-//})
-public class GatewayApplication {
+@ComponentScan({"com.xl.common.autoconfig",
+        "com.xl.gateway"})
+public class XlGatewayApplication {
     public static void main(String[] args) {
-        SpringApplication.run(GatewayApplication.class,args);
+        SpringApplication.run(XlGatewayApplication.class,args);
     }
 }

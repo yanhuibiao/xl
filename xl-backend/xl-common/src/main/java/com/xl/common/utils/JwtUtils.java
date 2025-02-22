@@ -1,9 +1,10 @@
-package com.xl.common.autoconfig.template;
+package com.xl.common.utils;
 
 import com.xl.common.autoconfig.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.TextCodec;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ public class JwtUtils {
     public String getToken(Map params){
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
-                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret()) //加密方式
+                .signWith(SignatureAlgorithm.HS512, TextCodec.BASE64.encode(jwtProperties.getSecret())) //加密方式
                 .setExpiration(new Date(currentTime + (long) jwtProperties.getSessionTimeout() * 60 * 1000)) //过期时间戳
                 .addClaims(params)
                 .compact();

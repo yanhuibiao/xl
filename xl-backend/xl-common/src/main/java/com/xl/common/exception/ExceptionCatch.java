@@ -20,7 +20,7 @@ public class ExceptionCatch {
     @ResponseBody
     public ResponseResult exception(BusinessException be){
         be.printStackTrace();
-        log.error("catch exception:{}",be.getMessage());
+        log.error("catch exception:{}",be.getResponseCodeEnum().getmessage());
         return ResponseResult.errorResult(be.getResponseCodeEnum());
     }
 

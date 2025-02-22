@@ -33,10 +33,10 @@ public class LogAspect {
     }
 
     // 方法执行出现异常时
-    @AfterThrowing(pointcut = "execution(* com.xl..*.*(..))", throwing = "ex")
-    public void logAfterThrowing(JoinPoint joinPoint, Throwable ex) {
-        logger.error("Method {} executed with an exception: {}", joinPoint.getSignature(), ex.getMessage());
-    }
+//    @AfterThrowing(pointcut = "execution(* com.xl..*.*(..))", throwing = "ex")
+//    public void logAfterThrowing(JoinPoint joinPoint, Throwable ex) {
+//        logger.error("Method {} executed with an exception: {}", joinPoint.getSignature(), ex.getMessage());
+//    }
 
 
     // 定义切点：匹配所有标注了@Loggable注解的方法

@@ -245,7 +245,7 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import { getList } from '@/api/user'
+import { getList } from '@/api/userMapper'
 import { deepClone } from '@/utils'
 
 const _temp = {

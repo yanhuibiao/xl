@@ -30,6 +30,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!--nacos 配置依赖-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
@@ -38,12 +39,7 @@
             <groupId>com.xl</groupId>
             <artifactId>xl-common</artifactId>
         </dependency>
-        <!--        java.lang.NoClassDefFoundError: javax/xml/bind/DatatypeConverter-->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
-        </dependency>
+
     </dependencies>
 
 </project>

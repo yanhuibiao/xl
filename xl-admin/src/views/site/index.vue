@@ -52,7 +52,7 @@
               </el-form-item>
               <el-form-item label="联系人">
                 <el-input v-model="temp.contact" placeholder="请输入联系人" @keyup.enter.native="submit">
-                  <i slot="append" class="el-icon-user" />
+                  <i slot="append" class="el-icon-userMapper" />
                 </el-input>
               </el-form-item>
               <el-form-item label="联系QQ">

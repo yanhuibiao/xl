@@ -114,21 +114,11 @@
                 <artifactId>xl-gateway</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!--		<dependency>-->
-            <!--			<groupId>com.yanhuiby</groupId>-->
-            <!--			<artifactId>fintech-dubbo-api</artifactId>-->
-            <!--			<version>${project.version}</version>-->
-            <!--		</dependency>-->
             <dependency>
                 <groupId>com.xl</groupId>
                 <artifactId>xl-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!--		<dependency>-->
-            <!--			<groupId>com.yanhuiby</groupId>-->
-            <!--			<artifactId>fintech-entry</artifactId>-->
-            <!--			<version>${project.version}</version>-->
-            <!--		</dependency>-->
 
             <!--  Spring boot 特殊处理包  -->
             <dependency>
@@ -253,16 +243,15 @@
             <!--                <artifactId>mybatis</artifactId>-->
             <!--                <version>${mybatis.version}</version>-->
             <!--            </dependency>-->
-            <!--            mybatis整合spring-->
-            <!--            <dependency>-->
-            <!--                <groupId>org.mybatis</groupId>-->
-            <!--                <artifactId>mybatis-spring</artifactId>-->
-            <!--                <version>${mybatis.spring.version}</version>-->
-            <!--            </dependency>-->
+<!--                        mybatis整合spring-->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis.spring.version}</version>
+            </dependency>
             <!--            mybatis plus-->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <!--                <artifactId>mybatis-plus-boot-starter</artifactId>-->
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis.plus.spring.boot.version}</version>
             </dependency>

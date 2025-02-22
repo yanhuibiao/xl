@@ -1,7 +1,7 @@
 <template>
   <view class="mine">
     <!-- 用户信息 -->
-    <view class="user-info">
+    <view class="userMapper-info">
       <text class="level">LV4</text>
       <text class="welcome">晚上好! 欢迎访问赣服通~</text>
     </view>
