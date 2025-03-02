@@ -3,7 +3,7 @@ xl:
 server:
   port: 18081
   servlet:
-    context-path: /identitybusiness
+    context-path: /ib
 spring:
   application:
     name: xl-identitybusiness # 服务名称
@@ -13,19 +13,19 @@ spring:
       - optional:nacos:xl-identitybusiness.yaml?group=DEFAULT_GROUP&refreshEnabled=true
   cloud:
     nacos:
-      server-addr: 192.168.93.135:8848 # 注册Nacos地址，其他服务可以发现自己
+      server-addr: 192.168.224.128:8848 # 注册Nacos地址，其他服务可以发现自己
       config:
-        server-addr: 192.168.93.135:8848  # 读取Nacos配置的地址，可忽略
+        server-addr: 192.168.224.128:8848  # 读取Nacos配置的地址，可忽略
 #      # file-extension: yaml # 配置文件后缀名 这里会从${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
       discovery:  #从nacos中心查找其他服务
-        cluster-name: CS  # 集群名称
-        namespace: c175d688-72cb-4c61-8400-7f50c29346e0 # 命名空间，填ID
+        cluster-name: public  # 集群名称
+        namespace: # 命名空间，填ID  c175d688-72cb-4c61-8400-7f50c29346e0
 dubbo:
   protocol:
     name: dubbo
     port: 20881
   registry:
-    address: nacos://192.168.93.135:8848    # dubbo注册地址，其他服务可以发现自己,dubbo只需注册无需发现
+    address: nacos://192.168.224.128:8848?namespace=dubboNamespace&group=DEFAULT_GROUP    # dubbo注册地址，其他服务可以发现自己,dubbo只需注册无需发现
     use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
     cluster:
   scan:
@@ -37,6 +37,7 @@ dubbo:
   application:   #Qos=Quality of Service，qos是Dubbo的在线运维命令，可以对服务进行动态的配置、控制及查询
     qos-enable: false    #是否启动QoS
     serialize-check-status: WARN
+    name: ${spring.application.name}-dubbo  #dubbo在nacos注册的服务，不设置会和spring.application.name一样，导致一个服务有两个实例
 #    check-serializable: false
 #    qos-port: 22224    #启动QoS绑定的端口
 #    qos-accept-foreign-ip: false    #是否允许远程访问
@@ -46,4 +47,5 @@ mybatis-plus:
   mapper-locations: classpath:com/xl/**/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 

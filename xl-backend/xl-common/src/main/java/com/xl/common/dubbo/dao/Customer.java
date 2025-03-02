@@ -21,6 +21,7 @@ public class Customer extends BasePojo {
     String accountId;
     String identityType;
 
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {

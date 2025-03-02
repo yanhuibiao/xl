@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @EnableConfigurationProperties({
         JwtProperties.class
 })
-public class AutomaticUtilConfig {
+public class AutoConfigUtil {
 
     @Bean
     public JwtUtils jwtUtils(JwtProperties jwtProperties){

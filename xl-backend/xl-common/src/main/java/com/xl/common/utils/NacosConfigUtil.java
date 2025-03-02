@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
 
 public class NacosConfigUtil {
 
-    private static final String SERVER_ADDR = "192.168.93.135:8848"; // Nacos 服务器地址
+    private static final String SERVER_ADDR = "192.168.224.128:8848"; // Nacos 服务器地址
     private static ConfigService configService;
     private static NamingService namingService;
     public String data_id;

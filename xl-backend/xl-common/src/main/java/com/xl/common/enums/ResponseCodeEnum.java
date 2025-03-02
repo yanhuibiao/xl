@@ -4,7 +4,7 @@ package com.xl.common.enums;
 public enum ResponseCodeEnum {
 
     // Operation successful
-    SUCCESS(200,"Operation successful"),
+    SUCCESS(200,"Success"),
     // Login、Session段1~50
     NEED_LOGIN(50,"Login Again Please"),
     LOGIN_FAILED(51,"Incorrect username or password"),

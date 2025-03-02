@@ -19,7 +19,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     // :冒号后面表示默认值，配置不存在的时候取默认值
-    @Value("${spring.data.redis.host:192.168.93.135}")
+    @Value("${spring.data.redis.host:192.168.224.128}")
     private String host;
 
     @Value("${spring.data.redis.port:6379}")

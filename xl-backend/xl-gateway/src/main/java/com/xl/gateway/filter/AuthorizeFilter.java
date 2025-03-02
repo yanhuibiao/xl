@@ -2,6 +2,7 @@ package com.xl.gateway.filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xl.common.enums.ResponseCodeEnum;
 import com.xl.common.utils.JwtUtils;
 import com.xl.common.dto.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class AuthorizeFilter implements GlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         //0.判断是否登录接口,是的话直接放行
         String url = exchange.getRequest().getURI().getPath();
-        if (url.contains("/login")){
+        if (url.equals("/ib/auth/login") || url.equals("/ib/auth/getcaptcha")) {
             return chain.filter(exchange);
         }
         // 1.获取请求参数
@@ -54,12 +55,12 @@ public class AuthorizeFilter implements GlobalFilter {
 //        return response.setComplete();
 
 //        下面是自己设置响应data
-        response.getHeaders().add("Content-Type","application/json");
+        response.getHeaders().add("Content-Type","application/json;charset=utf-8");
         DataBufferFactory bufferFactory = response.bufferFactory();
         ObjectMapper objectMapper = new ObjectMapper();
         DataBuffer wrap = null;
         try {
-            wrap = bufferFactory.wrap(objectMapper.writeValueAsBytes(ResponseResult.errorResult(401,"会话超时")));
+            wrap = bufferFactory.wrap(objectMapper.writeValueAsBytes(ResponseResult.errorResult(ResponseCodeEnum.TOKEN_EXPIRE)));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

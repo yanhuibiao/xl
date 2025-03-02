@@ -1,14 +1,14 @@
 server:
   port: 18082
   servlet:
-    context-path: /transaction
+    context-path: /trans
 spring:
   application:
     name: xl-transaction
   datasource:
-    url: jdbc:mysql://localhost:3306/fintech?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.224.128:3306/?useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: 1234
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   config:
     import:
@@ -16,9 +16,9 @@ spring:
       - optional:nacos:xl-transaction.yaml?group=DEFAULT_GROUP&refreshEnabled=true
   cloud:
     nacos:
-      server-addr: 192.168.93.135:8848 # 注册Nacos地址
+      server-addr: 192.168.224.128:8848 # 注册Nacos地址
       #      config:
-      #        server-addr: 192.168.93.135:8848  # Nacos地址，可忽略
+      #        server-addr: 192.168.224.128:8848  # Nacos地址，可忽略
       #      # file-extension: yaml # 配置文件后缀名
       #      # ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
       discovery:
@@ -32,7 +32,7 @@ dubbo:
     name: dubbo
     port: 20882
   registry:
-    address: nacos://192.168.93.135:8848
+    address: nacos://192.168.224.128:8848
     use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
   #    address: spring-cloud://localhost   #使用spring cloud中的注册中心
   scan:
