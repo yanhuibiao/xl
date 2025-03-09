@@ -47,5 +47,6 @@ mybatis-plus:
   mapper-locations: classpath:com/xl/**/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-
+jwt:
+  secret: xlbb
+  expiration: 31

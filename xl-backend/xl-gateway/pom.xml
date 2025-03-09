@@ -47,6 +47,10 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-security</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
 <!--                gatwat不需要dubbo的远程调用-->
                 <exclusion>
                     <groupId>org.apache.dubbo</groupId>

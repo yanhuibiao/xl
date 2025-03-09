@@ -1,6 +1,6 @@
-package com.xl.common.autoconfig;
+package com.xl.common.config.autoconfig;
 
-import com.xl.common.autoconfig.properties.JwtProperties;
+import com.xl.common.config.autoconfig.properties.JwtProperties;
 import com.xl.common.utils.JwtUtils;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

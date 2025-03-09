@@ -1,12 +1,11 @@
 package com.xl.gateway;
 
-import com.xl.common.config.SecurityConfig;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
@@ -14,11 +13,11 @@ import org.springframework.context.annotation.FilterType;
         DataSourceAutoConfiguration.class,
         DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
+
 })
-@ComponentScan(value = {"com.xl.common", "com.xl.gateway"},
-        excludeFilters = @ComponentScan.Filter(
-        type = FilterType.REGEX,       // 使用正则匹配包路径
-        pattern = "com.xl.common.config.SecurityConfig*")
+@ComponentScan(value = {"com.xl.common.config", "com.xl.gateway"},
+//        excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com\\.xl\\.common\\.config\\.SecurityConfig*") // 使用正则匹配包路径
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = {com.xl.common.config.SecurityConfig.class})
 )
 public class XlGatewayApplication {
     public static void main(String[] args) {

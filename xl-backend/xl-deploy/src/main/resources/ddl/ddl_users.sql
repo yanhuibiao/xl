@@ -11,7 +11,7 @@ USE xl_users;
 -- 用户表
 create table IF NOT EXISTS customer
 (
-    id varchar(255) not null COMMENT '用户ID',
+    id varchar(255) PRIMARY KEY not null COMMENT '用户ID',
     username varchar(255) not null COMMENT '用户名',
     age int,
     sex char,
@@ -27,6 +27,16 @@ create table IF NOT EXISTS customer
     constraint username
         unique (username)
 ) COMMENT='用户表';
-alter table customer
-    add primary key (id);
 
+CREATE TABLE administrator (
+    id VARCHAR(255) PRIMARY KEY,  -- 使用MyBatis Plus的IdType.ASSIGN_ID策略
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    status VARCHAR(2) NOT NULL,  -- 假设IdentityStatus是一个枚举类型，存储为字符串
+    phone VARCHAR(255),
+    account_id VARCHAR(255),
+    role_id VARCHAR(255),
+    password_expire_time DATETIME,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_update_time datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+);

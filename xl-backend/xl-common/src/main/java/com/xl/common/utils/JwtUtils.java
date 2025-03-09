@@ -1,12 +1,13 @@
 package com.xl.common.utils;
 
-import com.xl.common.autoconfig.properties.JwtProperties;
+import com.xl.common.config.autoconfig.properties.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class JwtUtils {
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, TextCodec.BASE64.encode(jwtProperties.getSecret())) //加密方式
-                .setExpiration(new Date(currentTime + (long) jwtProperties.getSessionTimeout() * 60 * 1000)) //过期时间戳
+                .setExpiration(new Date(currentTime + (long) jwtProperties.getExpiration() * 60 * 1000)) //过期时间戳
                 .addClaims(params)
                 .compact();
     }
@@ -47,6 +48,23 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String getToken(String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtProperties.getExpiration() * 60 * 1000L);
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret())
+                .compact();
+    }
+
+    /**
+     * 获取Token中的claims信息
+     */
+    public String getSubject(String token) {
+        return this.getClaims(token).getSubject(); // 直接获取sub字段的值
+    }
     /**
      * 获取Token中的claims信息
      */

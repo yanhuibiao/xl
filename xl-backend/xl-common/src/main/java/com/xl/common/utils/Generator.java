@@ -70,7 +70,6 @@ public class Generator {
 //        try (java.io.OutputStream os = Files.newOutputStream(path)) {
 //            javax.imageio.ImageIO.write(image, "png", os);
 //        }
-        String[] ar = new String[]{captchaText, base64Image};
-        return ar;
+        return new String[]{captchaText, base64Image};
     }
 }

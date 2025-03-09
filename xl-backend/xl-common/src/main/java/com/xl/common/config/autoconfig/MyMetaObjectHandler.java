@@ -1,4 +1,4 @@
-package com.xl.common.autoconfig;
+package com.xl.common.config.autoconfig;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
@@ -14,11 +14,11 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "create_time", LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());  //字段名称与类属性值一样，不是跟表字段一样
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.strictUpdateFill(metaObject, "last_update_time", LocalDateTime.class, LocalDateTime.now());
+        this.strictUpdateFill(metaObject, "lastUpdateTime", LocalDateTime.class, LocalDateTime.now());
     }
 }

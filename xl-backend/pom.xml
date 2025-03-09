@@ -134,7 +134,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <!--  排除默认的logback日志，使用log4j -->
+                <!--  排除默认的logback日志，使用log4j2 -->
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>

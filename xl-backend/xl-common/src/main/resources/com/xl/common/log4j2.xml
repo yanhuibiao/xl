@@ -10,8 +10,7 @@
         <!-- <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %highlight{%-5level} [%t] %highlight{%c{1.}.%M(%L)}: %msg%n" />-->
         <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
         <!-- 定义日志存储的路径 -->
-        <property name="FILE_PATH" value="C:\Users\77238\Desktop\log" />
-        <!--<property name="FILE_NAME" value="myProject" />-->
+        <property name="FILE_PATH" value="C:\Users\77238\Desktop\log\${spring:spring.application.name}" />
     </Properties>
     <!--此节点有三种常见的子节点：Console,RollingFile,File-->
     <appenders>
@@ -21,14 +20,14 @@
             <!--输出日志的格式,默认为：%m%n,即只输出日志和换行-->
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <!--阈值过滤器，控制台只输出level及其以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
-            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
         </console>
 <!--        文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，适合临时测试用-->
 <!--        <File name="Filelog" fileName="${FILE_PATH}/test.log" append="false">-->
 <!--            <PatternLayout pattern="${LOG_PATTERN}"/>-->
 <!--        </File>-->
 <!--         这个会打印出所有的debug及以上级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
-        <RollingFile name="RollingFileDebug-identitybusiness" fileName="${FILE_PATH}/identitybusiness/debug.log" filePattern="${FILE_PATH}/identitybusiness/DEBUG-%d{yyyy-MM-dd}_%i.log">
+        <RollingFile name="RollingFileDebug" fileName="${FILE_PATH}/debug.log" filePattern="${FILE_PATH}/DEBUG-%d{yyyy-MM-dd}_%i.log">
             <!--阈值过滤器，控制台只输出level及其以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
@@ -48,8 +47,7 @@
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>
-        <!--        这个会打印出所有的info及以上级别的信息-->
-        <RollingFile name="RollingFileInfo-identitybusiness" fileName="${FILE_PATH}/identitybusiness/info.log" filePattern="${FILE_PATH}/identitybusiness/INFO-%d{yyyy-MM-dd}_%i.log">
+        <RollingFile name="RollingFileInfo" fileName="${FILE_PATH}/info.log" filePattern="${FILE_PATH}/INFO-%d{yyyy-MM-dd}_%i.log">
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -58,76 +56,7 @@
             </Policies>
             <DefaultRolloverStrategy max="15"/>
         </RollingFile>
-        <!--        这个会打印出所有的error及以上级别的信息-->
-        <RollingFile name="RollingFileError-identitybusiness" fileName="${FILE_PATH}/identitybusiness/error.log" filePattern="${FILE_PATH}/identitybusiness/ERROR-%d{yyyy-MM-dd}_%i.log">
-            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="15"/>
-        </RollingFile>
-
-<!--        transaction模块的日志配置-->
-        <RollingFile name="RollingFileDebug-transaction" fileName="${FILE_PATH}/transaction/debug.log" filePattern="${FILE_PATH}/transaction/DEBUG-%d{yyyy-MM-dd}_%i.log">
-            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="15">
-                <Delete basePath="${FILE_PATH}" maxDepth="2">
-                    <IfFileName glob="*/*.log" />
-                    <IfLastModified age="360H" />
-                </Delete>
-            </DefaultRolloverStrategy>
-        </RollingFile>
-        <RollingFile name="RollingFileInfo-transaction" fileName="${FILE_PATH}/transaction/info.log" filePattern="${FILE_PATH}/transaction/INFO-%d{yyyy-MM-dd}_%i.log">
-            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="15"/>
-        </RollingFile>
-        <RollingFile name="RollingFileError-transaction" fileName="${FILE_PATH}/transaction/error.log" filePattern="${FILE_PATH}/transaction/ERROR-%d{yyyy-MM-dd}_%i.log">
-            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="15"/>
-        </RollingFile>
-
-        <!--        common模块的日志配置-->
-        <RollingFile name="RollingFileDebug-common" fileName="${FILE_PATH}/common/debug.log" filePattern="${FILE_PATH}/common/DEBUG-%d{yyyy-MM-dd}_%i.log">
-            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="15">
-                <Delete basePath="${FILE_PATH}" maxDepth="2">
-                    <IfFileName glob="*/*.log" />
-                    <IfLastModified age="360H" />
-                </Delete>
-            </DefaultRolloverStrategy>
-        </RollingFile>
-        <RollingFile name="RollingFileInfo-common" fileName="${FILE_PATH}/common/info.log" filePattern="${FILE_PATH}/common/INFO-%d{yyyy-MM-dd}_%i.log">
-            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="${LOG_PATTERN}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="15"/>
-        </RollingFile>
-        <RollingFile name="RollingFileError-common" fileName="${FILE_PATH}/common/error.log" filePattern="${FILE_PATH}/common/ERROR-%d{yyyy-MM-dd}_%i.log">
+        <RollingFile name="RollingFileError" fileName="${FILE_PATH}/error.log" filePattern="${FILE_PATH}/ERROR-%d{yyyy-MM-dd}_%i.log">
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
@@ -141,53 +70,27 @@
         <Async name="ConsoleAsync" bufferSize="20000" blocking="true">
             <AppenderRef ref="Console"/>
         </Async>
-        <Async name="identitybusinessAsync" bufferSize="20000" blocking="true">
-            <AppenderRef ref="RollingFileDebug-identitybusiness"/>
-            <AppenderRef ref="RollingFileInfo-identitybusiness"/>
-            <AppenderRef ref="RollingFileError-identitybusiness"/>
-        </Async>
-        <Async name="transactionAsync" bufferSize="20000" blocking="true">
-            <AppenderRef ref="RollingFileDebug-transaction"/>
-            <AppenderRef ref="RollingFileInfo-transaction"/>
-            <AppenderRef ref="RollingFileError-transaction"/>
-        </Async>
-        <Async name="commonAsync" bufferSize="20000" blocking="true">
-            <AppenderRef ref="RollingFileDebug-common"/>
-            <AppenderRef ref="RollingFileInfo-common"/>
-            <AppenderRef ref="RollingFileError-common"/>
+        <Async name="ServiceModelAsync" bufferSize="20000" blocking="true">
+            <AppenderRef ref="RollingFileDebug"/>
+            <AppenderRef ref="RollingFileInfo"/>
+            <AppenderRef ref="RollingFileError"/>
         </Async>
     </appenders>
-
-
     <!--Logger节点用来单独指定日志的形式，比如要为指定包下的class指定不同的日志级别等。-->
     <!--然后定义loggers，只有定义了logger并引入的Appender，Appender才会生效-->
     <loggers>
         <!--过滤掉spring和mybatis的一些无用的DEBUG信息-->
         <!--若是additivity设为false，则子Logger只会在自己的appender里输出，而不会在父Logger的appender里输出。-->
-        <logger name="org.mybatis" level="error" additivity="false">
+        <logger name="org" level="error" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
         </logger>
-        <logger name="org.alibaba" level="error" additivity="false">
+        <Logger name="com.xl" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAsync"/>
-        </logger>
-        <Logger name="org.springframework" level="error" additivity="false">
-            <AppenderRef ref="ConsoleAsync"/>
-        </Logger>
-        <Logger name="com.xl.identitybusiness" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAsync"/>
-            <AppenderRef ref="identitybusinessAsync"/>
-        </Logger>
-        <Logger name="com.xl.transaction" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAsync"/>
-            <AppenderRef ref="transactionAsync"/>
-        </Logger>
-        <Logger name="com.xl.common" level="error" additivity="false">
-            <AppenderRef ref="ConsoleAsync"/>
-            <AppenderRef ref="commonAsync"/>
+            <AppenderRef ref="ServiceModelAsync"/>
         </Logger>
         <!--root节点用来指定项目的根日志，level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.-->
         <root level="debug">
-            <AppenderRef ref="ConsoleAsync" />
+            <AppenderRef ref="Console" />
         </root>
     </loggers>
 

@@ -1,4 +1,4 @@
-package com.xl.common.autoconfig;
+package com.xl.common.config.autoconfig;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import lombok.extern.log4j.Log4j2;

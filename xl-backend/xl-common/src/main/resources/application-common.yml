@@ -20,9 +20,9 @@ logging:  # spring框架的日志。日志配置 无特殊需求无需更改
   config: classpath:com/xl/common/log4j2.xml
 #  pattern:
 #    dateformat: yyyy-MM-dd HH:mm:ss.SSS
-#  level:
-#    org.apache.dubbo: debug
-#    com.xl: error
+  level:
+    com.zaxxer.hikari: error
+    com.alibaba: error
 #    root: info
 #    javax.activation: info
 #    org.apache.catalina: info
