@@ -1,5 +1,7 @@
 package com.xl.identitybusiness;
 
+import com.alibaba.csp.sentinel.init.InitExecutor;
+import com.alibaba.csp.sentinel.transport.heartbeat.SimpleHttpHeartbeatSender;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

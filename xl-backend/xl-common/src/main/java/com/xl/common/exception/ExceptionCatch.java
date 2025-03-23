@@ -1,6 +1,6 @@
 package com.xl.common.exception;
 
-import com.xl.common.entity.ResponseEntity;
+import com.xl.common.dto.ResponseEntity;
 import com.xl.common.enums.ResponseCodeEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,8 +20,13 @@ public class ExceptionCatch {
     @ResponseBody
     public ResponseEntity exception(BusinessException be){
         be.printStackTrace();
-        log.error("catch exception:{}",be.getResponseCodeEnum().getmessage());
-        return ResponseEntity.errorResult(be.getResponseCodeEnum());
+        if (be.getResponseCodeEnum() == null){
+            log.error(be.getMsg());
+            return ResponseEntity.errorResult(be.getCode(),be.getMsg());
+        }else {
+            log.error("catch exception:{}",be.getResponseCodeEnum().getmessage());
+            return ResponseEntity.errorResult(be.getResponseCodeEnum());
+        }
     }
 
     /**

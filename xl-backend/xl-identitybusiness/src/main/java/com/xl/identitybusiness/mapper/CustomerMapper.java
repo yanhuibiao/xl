@@ -1,8 +1,7 @@
 package com.xl.identitybusiness.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xl.common.dubbo.dao.Customer;
+import com.xl.common.dubbo.entity.Customer;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

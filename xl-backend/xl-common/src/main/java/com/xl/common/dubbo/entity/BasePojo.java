@@ -1,9 +1,8 @@
-package com.xl.common.dubbo.dao;
+package com.xl.common.dubbo.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,9 +10,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class BasePojo implements Serializable {
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.INSERT)    // 插入时自动更新，使用mybatis-plus才生效
     public LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(fill = FieldFill.UPDATE)    // 更新时自动更新，使用mybatis-plus才生效
-    public LocalDateTime lastUpdateTime;
+    public LocalDateTime updateTime;
 }

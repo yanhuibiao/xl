@@ -9,6 +9,8 @@ spring:
   cloud:
     nacos:
       server-addr: 192.168.224.128:8848
+      username: nacos
+      password: nacos
       config:
         server-addr: 192.168.224.128:8848
       discovery:
@@ -47,5 +49,10 @@ spring:
             - StripPrefix= 1
       default-filters:  #给所有服务添加过滤器,优先级：default-filters>路由过滤器>gloalFilters
         - AddRequestHeader=default-filters,default-filters-added
+    sentinel: # sentinel配置
+      transport:
+        dashboard: 192.168.224.128:8858
+#        port: 8719
+      eager: true
 logging:
   config: classpath:com/xl/common/log4j2.xml

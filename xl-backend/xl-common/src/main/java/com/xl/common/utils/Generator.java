@@ -5,17 +5,27 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Generator {
-
+    // pin码长度
     private static final int PIN_LENGTH = 6;
+
     // 验证码
     private static final int WIDTH = 80;
     private static final int HEIGHT = 40;
     private static final int CODE_LENGTH =4;
     private static final int FONT_SIZE = 24;
+    // bumble id生成器
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final String TENANTID= "100";
+    private static final String STRIPS= "1000";
+    private static final AtomicInteger SEQUENCE = new AtomicInteger(1);
+
     /**
      * 随机生成6位数
      * @return
@@ -72,4 +82,18 @@ public class Generator {
 //        }
         return new String[]{captchaText, base64Image};
     }
+
+    /**
+     * 生成相关表No
+     * @return
+     */
+    public static String generateNumberId() {
+        String timestamp = LocalDateTime.now().format(FORMATTER);
+        int sequence = SEQUENCE.getAndIncrement();
+        if (SEQUENCE.get() > 9999) {
+            SEQUENCE.set(1);
+        }
+        return TENANTID + STRIPS + timestamp + String.format("%04d", sequence);
+    }
+
 }

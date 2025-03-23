@@ -7,8 +7,8 @@
     </view>
     
     <!-- 快捷功能区 -->
-    <view class="quick-entry">
-      <view class="entry-item" v-for="(item, index) in quickEntries" :key="index">
+    <view class="quick-tradeEntry">
+      <view class="tradeEntry-item" v-for="(item, index) in quickEntries" :key="index">
         <image :src="item.icon"></image>
         <text>{{item.name}}</text>
       </view>
@@ -64,12 +64,12 @@ export default {
     }
   }
   
-  .quick-entry {
+  .quick-tradeEntry {
     display: flex;
     justify-content: space-between;
     margin-top: 30rpx;
     
-    .entry-item {
+    .tradeEntry-item {
       text-align: center;
       
       image {

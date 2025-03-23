@@ -1,6 +1,6 @@
 package com.xl.common.exception;
 
-import com.xl.common.entity.ResponseEntity;
+import com.xl.common.dto.ResponseEntity;
 import com.xl.common.enums.ResponseCodeEnum;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

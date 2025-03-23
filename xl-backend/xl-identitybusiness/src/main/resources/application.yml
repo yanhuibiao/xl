@@ -14,9 +14,13 @@ spring:
   cloud:
     nacos:
       server-addr: 192.168.224.128:8848 # 注册Nacos地址，其他服务可以发现自己
+      username: nacos
+      password: nacos
       config:
         server-addr: 192.168.224.128:8848  # 读取Nacos配置的地址，可忽略
-#      # file-extension: yaml # 配置文件后缀名 这里会从${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
+        username: ${spring.cloud.nacos.username}
+        password: ${spring.cloud.nacos.password}
+      #      # file-extension: yaml # 配置文件后缀名 这里会从${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
       discovery:  #从nacos中心查找其他服务
         cluster-name: public  # 集群名称
         namespace: # 命名空间，填ID  c175d688-72cb-4c61-8400-7f50c29346e0
@@ -25,7 +29,7 @@ dubbo:
     name: dubbo
     port: 20881
   registry:
-    address: nacos://192.168.224.128:8848?namespace=dubboNamespace&group=DEFAULT_GROUP    # dubbo注册地址，其他服务可以发现自己,dubbo只需注册无需发现
+    address: nacos://192.168.224.128:8848?namespace=public&group=DUBBO_GROUP&username=nacos&password=nacos    # dubbo注册地址，其他服务可以发现自己,dubbo只需注册无需发现
     use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
     cluster:
   scan:

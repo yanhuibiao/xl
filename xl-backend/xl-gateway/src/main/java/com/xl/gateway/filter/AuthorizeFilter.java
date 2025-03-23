@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xl.common.enums.ResponseCodeEnum;
 import com.xl.common.utils.JwtUtils;
-import com.xl.common.entity.ResponseEntity;
+import com.xl.common.dto.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;

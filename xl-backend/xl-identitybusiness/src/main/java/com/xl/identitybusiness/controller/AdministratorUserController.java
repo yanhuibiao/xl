@@ -1,7 +1,7 @@
 package com.xl.identitybusiness.controller;
 
-import com.xl.common.dubbo.dao.Administrator;
-import com.xl.common.entity.ResponseEntity;
+import com.xl.common.dubbo.entity.Administrator;
+import com.xl.common.dto.ResponseEntity;
 import com.xl.identitybusiness.service.impl.AdministratorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,6 +1,6 @@
 package com.xl.identitybusiness;
 
-import com.xl.common.dubbo.dao.Customer;
+import com.xl.common.dubbo.entity.Customer;
 import com.xl.identitybusiness.mapper.CustomerMapper;
 import com.xl.identitybusiness.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;

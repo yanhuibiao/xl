@@ -1,13 +1,10 @@
 package com.xl.identitybusiness.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xl.common.dubbo.dao.Administrator;
-import com.xl.common.dubbo.dao.Customer;
+import com.xl.common.dubbo.entity.Administrator;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;

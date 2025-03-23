@@ -2,14 +2,13 @@ package com.xl.identitybusiness.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xl.common.annotation.LogAnnotation;
-import com.xl.common.dubbo.dao.Administrator;
-import com.xl.common.entity.LoginDto;
+import com.xl.common.dto.LoginDto;
 import com.xl.common.dubbo.api.CustomerService;
-import com.xl.common.dubbo.dao.Customer;
+import com.xl.common.dubbo.entity.Customer;
 import com.xl.common.enums.ResponseCodeEnum;
 import com.xl.common.exception.BusinessException;
 import com.xl.common.utils.JwtUtils;
-import com.xl.common.entity.ResponseEntity;
+import com.xl.common.dto.ResponseEntity;
 import com.xl.common.utils.Generator;
 import com.xl.identitybusiness.service.impl.AdministratorServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,8 +18,6 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -31,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -132,7 +128,7 @@ public class AuthController {
         }
         // 验证密码成功
         Map<String,String> tokenValueMap = new HashMap<>();
-        tokenValueMap.put("id",customer.getId());
+        tokenValueMap.put("id",customer.getIdentityId());
         tokenValueMap.put("username",customer.getUsername());
         Map<String,String> tokenMap = new HashMap<>();
         tokenMap.put("token",jwtUtils.getToken(tokenValueMap));

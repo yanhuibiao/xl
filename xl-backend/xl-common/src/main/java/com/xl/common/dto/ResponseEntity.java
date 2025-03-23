@@ -1,7 +1,6 @@
-package com.xl.common.entity;
+package com.xl.common.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.xl.common.enums.ResponseCodeEnum;
 
 import java.io.Serializable;

@@ -35,15 +35,15 @@
 .index .search-box input {
   flex: 1;
 }
-.index .quick-entry {
+.index .quick-tradeEntry {
   display: flex;
   justify-content: space-between;
   margin-top: 30rpx;
 }
-.index .quick-entry .entry-item {
+.index .quick-tradeEntry .tradeEntry-item {
   text-align: center;
 }
-.index .quick-entry .entry-item image {
+.index .quick-tradeEntry .tradeEntry-item image {
   width: 80rpx;
   height: 80rpx;
 }

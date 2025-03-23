@@ -3,7 +3,7 @@ package com.xl.identitybusiness.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xl.common.dubbo.api.AdministratorService;
-import com.xl.common.dubbo.dao.Administrator;
+import com.xl.common.dubbo.entity.Administrator;
 import com.xl.common.enums.IdentityStatus;
 import com.xl.common.enums.ResponseCodeEnum;
 import com.xl.common.exception.BusinessException;
@@ -24,7 +24,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+
+// 实现UserDetailsService是为了实现spring security的一个导入用户方法
 @DubboService
 @Service
 public class AdministratorServiceImpl extends ServiceImpl<AdministratorMapper, Administrator> implements AdministratorService, UserDetailsService {

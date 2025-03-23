@@ -21,7 +21,7 @@ create table IF NOT EXISTS customer
     account_id varchar(255),
     identity_type varchar(4),
     create_time datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    last_update_time datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    update_time datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     constraint id
         unique (id),
     constraint username
@@ -38,5 +38,5 @@ CREATE TABLE administrator (
     role_id VARCHAR(255),
     password_expire_time DATETIME,
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    last_update_time datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+    update_time datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 );

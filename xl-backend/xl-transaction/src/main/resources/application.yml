@@ -1,3 +1,5 @@
+xl:
+  db: /xl_transaction
 server:
   port: 18082
   servlet:
@@ -17,6 +19,8 @@ spring:
   cloud:
     nacos:
       server-addr: 192.168.224.128:8848 # 注册Nacos地址
+      username: nacos
+      password: nacos
       #      config:
       #        server-addr: 192.168.224.128:8848  # Nacos地址，可忽略
       #      # file-extension: yaml # 配置文件后缀名
@@ -32,11 +36,11 @@ dubbo:
     name: dubbo
     port: 20882
   registry:
-    address: nacos://192.168.224.128:8848
+    address: nacos://192.168.224.128:8848?namespace=public&group=DUBBO_GROUP&username=nacos&password=nacos
     use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
   #    address: spring-cloud://localhost   #使用spring cloud中的注册中心
   scan:
-    base-packages: com.xl.identitybusiness.service
+    base-packages: com.xl.transaction.service
   consumer:
     check: false
   application:   #Qos=Quality of Service，qos是Dubbo的在线运维命令，可以对服务进行动态的配置、控制及查询

@@ -1,4 +1,4 @@
-package com.xl.common.entity;
+package com.xl.common.dto;
 
 import lombok.Data;
 

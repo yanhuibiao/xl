@@ -1,4 +1,4 @@
-package com.xl.common.dubbo.dao;
+package com.xl.common.dubbo.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +17,7 @@ public class Administrator extends BasePojo {
     String password;
     IdentityStatus status;
     String phone;
-    String accountId;
+    String accountNo;
     String roleId;
     LocalDateTime passwordExpireTime;
 
@@ -39,7 +39,7 @@ public class Administrator extends BasePojo {
                 && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
                 && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
                 && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-                && (this.getAccountId() == null ? other.getAccountId() == null : this.getAccountId().equals(other.getAccountId()))
+                && (this.getAccountNo() == null ? other.getAccountNo() == null : this.getAccountNo().equals(other.getAccountNo()))
                 && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
                 && (this.getPasswordExpireTime() == null ? other.getPasswordExpireTime() == null : this.getPasswordExpireTime().equals(other.getPasswordExpireTime()));
     }
@@ -53,7 +53,7 @@ public class Administrator extends BasePojo {
         result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getAccountId() == null) ? 0 : getAccountId().hashCode());
+        result = prime * result + ((getAccountNo() == null) ? 0 : getAccountNo().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getPasswordExpireTime() == null) ? 0 : getPasswordExpireTime().hashCode());
         return result;
@@ -69,7 +69,7 @@ public class Administrator extends BasePojo {
         sb.append(", username=").append(username);
         sb.append(", phone=").append(phone);
         sb.append(", status=").append(status);
-        sb.append(", account_id=").append(accountId);
+        sb.append(", account_id=").append(accountNo);
         sb.append(", create_time=").append(getCreateTime());
         sb.append(", password_expire_time=").append(getPasswordExpireTime());
         sb.append("]");
