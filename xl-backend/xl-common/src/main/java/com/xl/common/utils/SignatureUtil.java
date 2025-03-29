@@ -57,33 +57,4 @@ public class SignatureUtil {
         return result;
     }
 
-    /**
-     * 验证交易流水数据签名
-     *
-     * @param TradeEntry 交易流水对象
-     * @return 是否验证通过
-     */
-    public boolean verifyEntry(TradeEntry TradeEntry) {
-        String signContent = TradeEntry.generateSignContent();
-        boolean result = SignatureUtil.verifySignature(signContent, TradeEntry.getSignature());
-        if (!result) {
-            log.warn("交易流水数据签名验证失败，流水号：{}", TradeEntry.getEntryNo());
-        }
-        return result;
-    }
-
-    /**
-     * 验证订单数据签名
-     *
-     * @param tradeOrder 订单对象
-     * @return 是否验证通过
-     */
-    public boolean verifyOrder(TradeOrder tradeOrder) {
-        String signContent = tradeOrder.generateSignContent();
-        boolean result = SignatureUtil.verifySignature(signContent, tradeOrder.getSignature());
-        if (!result) {
-            log.warn("订单数据签名验证失败，订单编号：{}", tradeOrder.getOrderNo());
-        }
-        return result;
-    }
 } 

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication()
-@EnableAspectJAutoProxy(proxyTargetClass = true)// 强制使用 CGLIB 代理
+//@EnableAspectJAutoProxy(proxyTargetClass = true)// 强制使用 CGLIB 代理
 @ComponentScan(basePackages = {"com.xl"})
 @MapperScan("com.xl.identitybusiness.mapper")
 public class XlIdentityBusinessApplication {

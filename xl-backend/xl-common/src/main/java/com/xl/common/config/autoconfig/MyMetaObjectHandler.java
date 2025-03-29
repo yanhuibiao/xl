@@ -6,6 +6,7 @@ import com.xl.common.dubbo.entity.TradeEntry;
 import com.xl.common.dubbo.entity.TradeOrder;
 import com.xl.common.utils.Generator;
 import com.xl.common.utils.SignatureUtil;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -21,29 +22,26 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
+        // 只对有注解的字段生效，即使有strictInsertFill方法插入 没注解的字段 也是不生效
         this.strictInsertFill(metaObject, "createTime", LocalDateTime::now, LocalDateTime.class);
         this.strictInsertFill(metaObject, "updateTime", LocalDateTime::now, LocalDateTime.class);
-
         // 处理签名和number(No)
         Object originalObject = metaObject.getOriginalObject();
         if (originalObject instanceof TradeAccount) {
             TradeAccount tradeAccount = (TradeAccount) originalObject;
-            String signContent = tradeAccount.generateSignContent();
-            String signature = SignatureUtil.generateSignature(signContent);
+            // 当插入的对象accountNo为空
+            if (StringUtil.isNullOrEmpty(tradeAccount.getAccountNo())) {
+                String accountNo = Generator.generateNumberId();
+                tradeAccount.setAccountNo(accountNo);
+                this.strictInsertFill(metaObject, "accountNo", String.class, accountNo);
+//            this.strictInsertFill(metaObject, "accountNo", Generator::generateNumberId, String.class);
+            }
+            String signature = SignatureUtil.generateSignature(tradeAccount.generateSignContent());
             this.strictInsertFill(metaObject, "signature", () -> signature, String.class);
-            this.strictInsertFill(metaObject, "accountNo", Generator::generateNumberId, String.class);
-        } else if (originalObject instanceof TradeEntry) {
-            TradeEntry tradeEntry = (TradeEntry) originalObject;
-            String signContent = tradeEntry.generateSignContent();
-            String signature = SignatureUtil.generateSignature(signContent);
-            this.strictInsertFill(metaObject, "signature", () -> signature, String.class);
-            this.strictInsertFill(metaObject, "entryNo", Generator::generateNumberId, String.class);
-        } else if (originalObject instanceof TradeOrder) {
-            TradeOrder tradeOrder = (TradeOrder) originalObject;
-            String signContent = tradeOrder.generateSignContent();
-            String signature = SignatureUtil.generateSignature(signContent);
-            this.strictInsertFill(metaObject, "signature", () -> signature, String.class);
-            this.strictInsertFill(metaObject, "orderNo", Generator::generateNumberId, String.class);
+        }if (originalObject instanceof TradeEntry tradeEntry) {
+            if (StringUtil.isNullOrEmpty(tradeEntry.getEntryNo())) {
+                this.strictInsertFill(metaObject, "entryNo", String.class, Generator.generateNumberId());
+            }
         }
 
         /**
@@ -86,24 +84,12 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
         this.strictUpdateFill(metaObject, "lastUpdateTime", LocalDateTime.class, LocalDateTime.now());
-
         // 处理签名
         Object originalObject = metaObject.getOriginalObject();
-        if (originalObject instanceof TradeAccount) {
-            TradeAccount tradeAccount = (TradeAccount) originalObject;
-            String signContent = tradeAccount.generateSignContent();
-            String signature = SignatureUtil.generateSignature(signContent);
-            metaObject.setValue("signature", signature);
-        } else if (originalObject instanceof TradeEntry) {
-            TradeEntry tradeEntry = (TradeEntry) originalObject;
-            String signContent = tradeEntry.generateSignContent();
-            String signature = SignatureUtil.generateSignature(signContent);
-            metaObject.setValue("signature", signature);
-        } else if (originalObject instanceof TradeOrder) {
-            TradeOrder tradeOrder = (TradeOrder) originalObject;
-            String signContent = tradeOrder.generateSignContent();
-            String signature = SignatureUtil.generateSignature(signContent);
-            metaObject.setValue("signature", signature);
+        // 模式变量,直接创建了tradeAccount变量
+        if (originalObject instanceof TradeAccount tradeAccount) {
+            this.strictUpdateFill(metaObject, "signature", String.class, SignatureUtil.generateSignature(tradeAccount.generateSignContent()));
+//            metaObject.setValue("signature", SignatureUtil.generateSignature(tradeAccount.generateSignContent()));
         }
     }
 }

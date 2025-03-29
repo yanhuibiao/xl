@@ -22,7 +22,7 @@ spring:
         password: ${spring.cloud.nacos.password}
       #      # file-extension: yaml # 配置文件后缀名 这里会从${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
       discovery:  #从nacos中心查找其他服务
-        cluster-name: public  # 集群名称
+        cluster-name: default  # 集群名称
         namespace: # 命名空间，填ID  c175d688-72cb-4c61-8400-7f50c29346e0
 dubbo:
   protocol:

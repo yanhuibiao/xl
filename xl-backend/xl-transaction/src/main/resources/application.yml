@@ -26,8 +26,8 @@ spring:
       #      # file-extension: yaml # 配置文件后缀名
       #      # ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
       discovery:
-        cluster-name: CS
-        namespace: c175d688-72cb-4c61-8400-7f50c29346e0 # 命名空间，填ID
+        cluster-name: default
+        namespace: # 命名空间，填ID
 #2021.0.5版本的 Spring Cloud 默认不再启用 bootstrap包
 
 # dubbo注册地址
@@ -40,9 +40,14 @@ dubbo:
     use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
   #    address: spring-cloud://localhost   #使用spring cloud中的注册中心
   scan:
-    base-packages: com.xl.transaction.service
+    base-packages: com.xl.transaction.service   # 指定实现服务的包
   consumer:
     check: false
   application:   #Qos=Quality of Service，qos是Dubbo的在线运维命令，可以对服务进行动态的配置、控制及查询
     qos-enable: false    #是否启动QoS
     serialize-check-status: WARN
+    name: ${spring.application.name}-dubbo
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql
+  mapper-locations: classpath*:/com/xl/**/mapper/*.xml

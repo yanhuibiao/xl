@@ -10,7 +10,7 @@
         <!-- <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %highlight{%-5level} [%t] %highlight{%c{1.}.%M(%L)}: %msg%n" />-->
         <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
         <!-- 定义日志存储的路径 -->
-        <property name="FILE_PATH" value="C:\Users\77238\Desktop\log\${spring:spring.application.name}" />
+        <property name="FILE_PATH" value="C:\Users\77238\Desktop\log\${spring:spring.application.name:-defaultApp}" />
     </Properties>
     <!--此节点有三种常见的子节点：Console,RollingFile,File-->
     <appenders>
@@ -89,7 +89,7 @@
             <AppenderRef ref="ServiceModelAsync"/>
         </Logger>
         <!--root节点用来指定项目的根日志，level:日志输出级别，共有8个级别，按照从低到高为：All < Trace < Debug < Info < Warn < Error < Fatal < OFF.-->
-        <root level="warn">
+        <root level="info">
             <AppenderRef ref="Console" />
         </root>
     </loggers>

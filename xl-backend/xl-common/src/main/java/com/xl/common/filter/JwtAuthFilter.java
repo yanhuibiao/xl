@@ -38,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
 
         // 放行登录接口
-        String regex = "/auth/.*|/admin/register";
+        String regex = "/auth/.*|/admin/register|/swagger-ui.html|/swagger-ui/.*|/api-docs/.*";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(path);
         boolean isMatch = matcher.matches(); // 判断是否完全匹配

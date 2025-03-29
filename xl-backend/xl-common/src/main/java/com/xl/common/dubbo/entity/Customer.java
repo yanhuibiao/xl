@@ -1,6 +1,7 @@
 package com.xl.common.dubbo.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xl.common.enums.IdentityStatus;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class Customer extends BasePojo {
     Integer age;
     @TableField("sex")
     String gender;
+    @JsonIgnore  // 该字段不会出现在 JSON 响应中
     @TableField("security_credential")
     String password;
     String phone;

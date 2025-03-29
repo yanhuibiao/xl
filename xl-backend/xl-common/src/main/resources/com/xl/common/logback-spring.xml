@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 配置文件每隔1分钟，就检查更新 -->
+<configuration scan="true" scanPeriod="60 seconds">
+    <!-- 开启调试模式（可选，调试日志配置时用） -->
+    <!-- <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/> -->
+    <!-- 从 Spring 环境读取应用名，若未定义则使用默认值 -->
+    <springProperty scope="context" name="APP_NAME"
+                    source="spring.application.name"
+                    defaultValue="defaultAppName"/>
+    <!-- 格式化输出：%date表示日期(可缩写成%d，后同)，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+    <!-- %logger{36} 表示 Logger 名字最长36个字符 ,%highlight 高亮 -->
+    <property name="LOG_PATTERN" value="%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n){TRACE=CYAN, DEBUG=GREEN, INFO=BLUE, WARN=YELLOW, ERROR=RED}"/>
+    <property name="LOG_PATH" value="C:\Users\77238\Desktop\log\${APP_NAME}\"/>
+    <property name="LOG_MaxHistory" value="30"/>
+
+
+    <!-- ch.qos.logback.core.ConsoleAppender 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 过去使用layout，现在都推荐使用encoder,作用一：将日志信息转换（格式化）为字符串,作用二：然后写入到文件中-->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件日志输出（每天滚动） -->
+    <appender name="debugAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 例如当天，也就是今天是2020-2-10，那么在这天生成的日志文件路径为${LOG_PATH}/debug.log
+             接着到了明天，也就是2019-2-11，这天生成的日志文件路径为${LOG_PATH}/debug.log，
+             但昨天2020-2-10，生成的日志文件路径就变为${LOG_PATH}/debug/debug-2020-2-10.log.gz(压缩文件) -->
+        <!-- 当天生成的日志文件的路径 -->
+        <file>${LOG_PATH}/debug.log</file>
+        <!-- 设置基于时间(每天)的滚动策略，也就是将日志内容按照日期来写入到相应的文件中-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天归档，最多保留30天 -->
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-debug-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${LOG_MaxHistory}</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 过滤掉非debug级别的信息 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>debug</level>
+            <onMatch>ACCEPT</onMatch>
+            <!-- 作用是拒绝写入所有与<level>不匹配的日志信息，也就是非debug级别的日志信息都不会被写入到日志文件中 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 2.打印info级别日志的设置 -->
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-info-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${LOG_MaxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!-- 过滤掉非info级别的信息 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 3.打印error级别日志的设置 -->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${LOG_MaxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <logger name="org.springframework" level="INFO"/>
+    <!-- 指定日志使用CONSOLE和FILE输出 -->
+    <logger name="com.xl" level="DEBUG">
+<!--        <appender-ref ref="console"/>-->
+<!--        <appender-ref ref="debugAppender"/>-->
+<!--        <appender-ref ref="infoAppender"/>-->
+<!--        <appender-ref ref="errorAppender"/>-->
+    </logger>
+    <logger name="com.alibaba" level="WARN"/>
+    <logger name="io.netty" level="ERROR"/>
+
+    <!-- 让所有日志都使用CONSOLE和FILE 输出 -->
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="debugAppender"/>
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="errorAppender"/>
+    </root>
+</configuration>

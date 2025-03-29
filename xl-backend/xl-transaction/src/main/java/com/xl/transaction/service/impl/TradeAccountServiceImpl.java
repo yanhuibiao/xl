@@ -1,6 +1,7 @@
 package com.xl.transaction.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xl.common.dubbo.api.TradeAccountService;
 import com.xl.common.dubbo.api.CustomerService;
@@ -22,22 +23,11 @@ public class TradeAccountServiceImpl extends ServiceImpl<TradeAccountMapper,Trad
     @Autowired
     private TradeAccountMapper tradeAccountMapper;
 
-    public TradeAccount getTradeAccountByAccountNo(String accountNo) {
-        LambdaQueryWrapper<TradeAccount> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TradeAccount::getAccountNo, accountNo);
-        return tradeAccountMapper.selectOne(queryWrapper);
-    }
-
-    public TradeAccount getTradeAccountByIdentityId(String identityId) {
-        LambdaQueryWrapper<TradeAccount> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TradeAccount::getIdentityId, identityId);
-        return tradeAccountMapper.selectOne(queryWrapper);
-    }
-
     @Override
-    public TradeAccount createAccount(String identityId) {
+    public TradeAccount createAccount(String identityId, String accountNo) {
         TradeAccount tradeAccount = new TradeAccount();
         tradeAccount.setIdentityId(identityId);
+        tradeAccount.setAccountNo(accountNo);
         tradeAccount.setBalance(BigDecimal.valueOf(0));
         tradeAccount.setFrozenAmount(BigDecimal.valueOf(0));
         tradeAccount.setAccountType(1);
@@ -45,30 +35,38 @@ public class TradeAccountServiceImpl extends ServiceImpl<TradeAccountMapper,Trad
         return getTradeAccountByIdentityId(identityId);
     }
 
-//    @Transactional
-//    public ResponseEntity<?> transfer(AccountDto transferRequest) {
-//        // 获取转出账户
-//        Customer fromCustomer = customerService.getById(transferRequest.getFromAccountId());
-//        // 获取转入账户
-//        Customer toCustomer = customerService.getById(transferRequest.getToAccountId());
-//
-//        if (fromCustomer == null || toCustomer == null) {
-//            return ResponseEntity.errorResult(ResponseCodeEnum.DATA_NOT_EXIST, "Account not found");
-//        }
-//
-//        // 检查余额是否足够
-//        if (fromCustomer.getBalance() < transferRequest.getAmount()) {
-//            return ResponseEntity.errorResult(ResponseCodeEnum.PARAM_INVALID, "Insufficient balance");
-//        }
-//
-//        // 执行转账
-//        fromCustomer.setBalance(fromCustomer.getBalance() - transferRequest.getAmount());
-//        toCustomer.setBalance(toCustomer.getBalance() + transferRequest.getAmount());
-//
-//        // 更新数据库
-//        customerService.updateById(fromCustomer);
-//        customerService.updateById(toCustomer);
-//
-//        return ResponseEntity.okResult("Transfer successful");
-//    }
+    @Override
+    public TradeAccount getTradeAccountByAccountNo(String accountNo) {
+        LambdaQueryWrapper<TradeAccount> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TradeAccount::getAccountNo, accountNo);
+        return tradeAccountMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public TradeAccount getTradeAccountByIdentityId(String identityId) {
+        LambdaQueryWrapper<TradeAccount> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TradeAccount::getIdentityId, identityId);
+        return tradeAccountMapper.selectOne(queryWrapper);
+    }
+
+    @Override
+    public TradeAccount updateAccountBalance(TradeAccount tradeAccount, BigDecimal amount) {
+        UpdateWrapper<TradeAccount> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("account_no", tradeAccount.getAccountNo());
+        tradeAccount.setSignature(null);
+        tradeAccountMapper.update(tradeAccount.setBalance(amount), updateWrapper);
+        // 传入对象才会触发mybatis plus的自动更新字段的操作
+//        tradeAccountMapper.update(updateWrapper);
+        return getTradeAccountByAccountNo(tradeAccount.getAccountNo());
+    }
+
+    @Override
+    public TradeAccount updateAccountFrozenAmount(TradeAccount tradeAccount, BigDecimal amount) {
+        UpdateWrapper<TradeAccount> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("account_no", tradeAccount.getAccountNo()).set("frozen_amount", amount);
+        // 如果entry类set字段的属性有值，还是以updateWrapper的set优先
+        tradeAccountMapper.update(tradeAccount.setSignature(null), updateWrapper);
+        return getTradeAccountByAccountNo(tradeAccount.getAccountNo());
+    }
+
 } 

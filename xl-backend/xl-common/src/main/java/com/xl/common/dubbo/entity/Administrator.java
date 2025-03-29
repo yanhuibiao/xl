@@ -2,10 +2,14 @@ package com.xl.common.dubbo.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xl.common.enums.IdentityStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
 @Data
 @TableName("administrator")
@@ -14,6 +18,9 @@ public class Administrator extends BasePojo {
     @TableId(type = IdType.ASSIGN_ID)       // 使用mybatis-plus才生效
     public String id;
     String username;
+//    @JsonIgnore  //该字段不会出现在JSON响应中，适用于前端也不会传
+//    @TableField(exist = false)	// 数据库中无此字段，或不想MyBatis-Plus处理,该字段不会被 MyBatis-Plus查询或更新
+    @JsonProperty(access = WRITE_ONLY)  // 前端可传该字段，但不会出现在返回结果
     String password;
     IdentityStatus status;
     String phone;

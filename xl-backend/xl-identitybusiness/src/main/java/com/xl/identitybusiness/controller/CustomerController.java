@@ -5,10 +5,7 @@ import com.xl.common.dubbo.api.CustomerService;
 import com.xl.common.dubbo.entity.Administrator;
 import com.xl.common.dubbo.entity.Customer;
 import com.xl.identitybusiness.service.impl.CustomerServiceImpl;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -26,5 +23,11 @@ public class CustomerController {
     public ResponseEntity<?> register(@RequestBody Customer customer) {
         Map<String, Object> responseObject = customerService.registerCustomer(customer);
         return ResponseEntity.okResult(responseObject);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<?> getCustomer(@PathVariable String username) {
+        Customer customer = customerService.findCustomerByUsername(username);
+        return ResponseEntity.okResult(customer);
     }
 }

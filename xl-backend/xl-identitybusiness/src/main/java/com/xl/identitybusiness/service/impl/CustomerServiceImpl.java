@@ -1,6 +1,7 @@
 package com.xl.identitybusiness.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xl.common.dubbo.api.CustomerService;
 import com.xl.common.dubbo.api.TradeAccountService;
@@ -13,6 +14,8 @@ import com.xl.identitybusiness.mapper.CustomerMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.seata.core.context.RootContext;
+import org.apache.seata.spring.annotation.GlobalLock;
 import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+//@DubboService(filter = "-seata")
 @DubboService
 @Service
 @Slf4j
@@ -58,16 +62,18 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         // 创建客户实体
         String accountId = Generator.generateNumberId();
+        String identityId = Generator.generateNumberId();
         customer.setIdentityType("1000");
         customer.setStatus(IdentityStatus.PendingActive);
         customer.setAccountNo(accountId);
+        customer.setIdentityId(identityId);
         // 保存客户信息
         customerMapper.insert(customer);
         log.info("客户注册成功：{}", customer.getId());
         // 调用交易服务创建账户
         TradeAccount account;
         try {
-            account = tradeAccountService.createAccount(accountId);
+            account = tradeAccountService.createAccount(identityId,accountId);
         }catch (Exception e){
             e.printStackTrace();
             throw new BusinessException(402,"account service error");
@@ -78,6 +84,14 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         map.put("account", account);
         // 构建返回对象
         return map;
+    }
+
+//    @GlobalLock  //告诉Seata不要开启新事务，但仍能让Seata通过XID进行事务控制。
+    @Override
+    public Customer findCustomerByUsername(String username) {
+        QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        return customerMapper.selectOne(queryWrapper);
     }
 
     /**

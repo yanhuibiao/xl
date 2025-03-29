@@ -23,13 +23,17 @@ spring:
 #        port: 8719
 #        clientIp: 192.168.31.92
       eager: true    # 启动时立即连接控制台
-logging:  # spring框架的日志。日志配置 无特殊需求无需更改
-  config: classpath:com/xl/common/log4j2.xml
+      log:
+        dir: C:\Users\77238\Desktop\log\sentinel
+
+logging:  # spring框架的日志。日志配置
+  config: classpath:com/xl/common/logback-spring.xml
 #  pattern:
 #    dateformat: yyyy-MM-dd HH:mm:ss.SSS
   level:
     com.zaxxer.hikari: error
     com.alibaba: info
+    org.springframework.aop: DEBUG
 #    root: info
 #    javax.activation: info
 #    org.apache.catalina: info
@@ -39,6 +43,7 @@ logging:  # spring框架的日志。日志配置 无特殊需求无需更改
 #    org.apache.tomcat: info
 #    org.springframework: debug
 #    com.chinamobile.cmss.bdpaas.resource.monitor: debug
+
 seata:
   registry: # TC服务注册中心的配置，微服务根据这些信息去注册中心获取tc服务地址
     # 参考tc服务自己的registry.conf中的配置
@@ -55,7 +60,11 @@ seata:
   service:
     vgroupMapping: # 事务组与TC服务cluster的映射关系
       default_tx_group: default
-#  config:
+#    grouplist:
+#      default: 192.168.224.128:8091
+  data-source-proxy-mode: AT
+#  enable-auto-data-source-proxy: true
+#  config:    #seata读取配置
 #    type: nacos
 #    nacos:
 #      server-addr: 192.168.224.128:8848
@@ -64,3 +73,15 @@ seata:
 #      username: nacos
 #      password: nacos
 #      data-id: seataServer.properties
+  client:
+    tm:
+      commit-retry-count: 5
+      rollback-retry-count: 5
+#      default-global-transaction-timeout: 60000
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  api-docs.enabled: true

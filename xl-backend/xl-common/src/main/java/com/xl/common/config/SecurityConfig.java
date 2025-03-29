@@ -5,6 +5,7 @@ import com.xl.common.filter.JwtAuthFilter;
 import com.xl.common.exception.SpringSecurityAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +44,8 @@ public class SecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(securityAuthenticationEntryPoint) // 处理未认证异常
                 .accessDeniedHandler(springSecurityAccessDeniedHandler)  // 处理权限不足异常
                 .and().authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/*").permitAll()
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/*","/swagger-ui.html",
+                        "/swagger-ui/**", "/api-docs/**").permitAll()
                 .requestMatchers("/admin/register").permitAll().anyRequest().authenticated());
         http.addFilterBefore(JwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -62,6 +64,7 @@ public class SecurityConfig {
 
 
     @Bean
+    @Lazy   //有循环依赖，可以尝试使用@Lazy注解来延迟某些Bean的初始化。这将强制Spring延迟创建某些Bean，避免在启动时立即初始化所有Bean。
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }

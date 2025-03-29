@@ -40,11 +40,11 @@
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${fastjson.dataformat.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.xiaoymin</groupId>-->
+<!--            <artifactId>knife4j-spring-boot-starter</artifactId>-->
+<!--            <version>${knife4j.version}</version>-->
+<!--        </dependency>-->
 <!--        Type kotlin.reflect.KProperty1 not present-->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

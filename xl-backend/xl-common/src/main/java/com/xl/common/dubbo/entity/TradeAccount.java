@@ -1,13 +1,18 @@
 package com.xl.common.dubbo.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.xl.common.utils.Generator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * 账户实体类
@@ -16,8 +21,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("trade_account")
-public class TradeAccount implements Serializable {
+public class TradeAccount extends BasePojo {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -59,18 +65,6 @@ public class TradeAccount implements Serializable {
     private Integer accountType;
 
     /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-
-    /**
      * 乐观锁版本号
      */
     @Version
@@ -79,6 +73,7 @@ public class TradeAccount implements Serializable {
     /**
      * 数据签名
      */
+    @JsonIgnore  // 该字段不会出现在 JSON 响应中
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String signature;
 
@@ -86,7 +81,15 @@ public class TradeAccount implements Serializable {
      * 生成签名内容（不包含签名字段本身）
      */
     public String generateSignContent() {
-        return id + accountNo + identityId + balance.toString() + frozenAmount.toString() +
-                accountStatus + accountType + version;
+        Objects.requireNonNull(accountNo, "accountNo cannot be null");
+        if (Stream.of(identityId, balance, frozenAmount).anyMatch(Objects::isNull)) {
+            throw new IllegalArgumentException("Some parameters are null");
+        }
+        return accountNo + identityId + balance.toString() + frozenAmount.toString();
+    }
+
+    public static abstract class TradeAccountStatus {
+        public static final Integer ACTIVE = 0;
+        public static final Integer Frozen = 1;
     }
 }

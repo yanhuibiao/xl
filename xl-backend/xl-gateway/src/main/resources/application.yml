@@ -14,7 +14,7 @@ spring:
       config:
         server-addr: 192.168.224.128:8848
       discovery:
-        cluster-name: public
+        cluster-name: default
         namespace:
     gateway:  #gateway
       globalcors:  #全局跨域处理
@@ -46,7 +46,7 @@ spring:
           predicates:
             - Path=/api/trans/**
           filters:
-            - StripPrefix= 1
+            - StripPrefix= 1  # 去除路径前缀（如 /goods/** 转发到服务时会去掉 /goods 前缀）
       default-filters:  #给所有服务添加过滤器,优先级：default-filters>路由过滤器>gloalFilters
         - AddRequestHeader=default-filters,default-filters-added
     sentinel: # sentinel配置
@@ -55,4 +55,10 @@ spring:
 #        port: 8719
       eager: true
 logging:
-  config: classpath:com/xl/common/log4j2.xml
+  config: classpath:com/xl/common/logback-spring.xml
+  level:
+    root: info
+    org:
+      springframework:
+        cloud:
+          gateway: DEBUG

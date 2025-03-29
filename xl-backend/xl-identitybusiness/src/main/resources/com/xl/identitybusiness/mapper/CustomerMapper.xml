@@ -12,10 +12,10 @@
         <result column="security_credential" property="password"/>
         <result column="phone" property="phone"/>
         <result column="status" property="status"/>
-        <result column="account_id" property="accountId"/>
+        <result column="account_id" property="accountNo"/>
         <result column="identity_type" property="identityType"/>
         <result column="create_time" property="createTime"/>
-        <result column="update_time" property="lastUpdateTime"/>
+        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <insert id="mybatisSave" useGeneratedKeys="true" keyProperty="id">

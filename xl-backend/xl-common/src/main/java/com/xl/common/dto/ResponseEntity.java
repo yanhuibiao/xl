@@ -78,7 +78,7 @@ public class ResponseEntity<T> implements Serializable {
     }
 
     public static ResponseEntity<?> errorResult(ResponseCodeEnum enums, String message){
-        return new ResponseEntity<>(enums.getCode(),message);
+        return new ResponseEntity<>(enums.getCode(),enums.getmessage(),message);
     }
 
     public static ResponseEntity<?> errorResult(int code, ResponseCodeEnum enums){

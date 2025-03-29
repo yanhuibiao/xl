@@ -1,7 +1,8 @@
 package com.xl.common.config.autoconfig;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import lombok.extern.log4j.Log4j2;
+
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component
-@Log4j2
+@Slf4j
 public abstract class CustomIdGenerator implements IdentifierGenerator {
     private final AtomicLong al = new AtomicLong(1);
 

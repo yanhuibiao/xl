@@ -2,13 +2,17 @@ package com.xl.common.dubbo.entity;
 
 import com.alibaba.csp.sentinel.transport.heartbeat.SimpleHttpHeartbeatSender;
 import com.baomidou.mybatisplus.annotation.*;
+import com.xl.common.utils.Generator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * 交易流水实体类
@@ -17,7 +21,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("trade_entry")
-public class TradeEntry implements Serializable {
+public class TradeEntry extends BasePojo {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -55,7 +60,7 @@ public class TradeEntry implements Serializable {
     /**
      * 交易方向：1-收入，2-支出
      */
-    private Integer direction;
+    private String direction;
 
     /**
      * 交易前余额
@@ -82,30 +87,4 @@ public class TradeEntry implements Serializable {
      */
     private String description;
 
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-
-    /**
-     * 数据签名
-     */
-    private String signature;
-
-    /**
-     * 生成签名内容（不包含签名字段本身）
-     */
-    public String generateSignContent() {
-        return id + entryNo + accountNo + (relatedAccountNo != null ? relatedAccountNo : "") +
-               amount.toString() + transactionType + direction + balanceBefore.toString() + 
-               balanceAfter.toString() + status + (orderNo != null ? orderNo : "") + 
-               (description != null ? description : "");
-    }
 } 

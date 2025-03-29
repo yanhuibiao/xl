@@ -17,7 +17,8 @@ import org.springframework.context.annotation.FilterType;
 })
 @ComponentScan(value = {"com.xl.common.config", "com.xl.gateway"},
 //        excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com\\.xl\\.common\\.config\\.SecurityConfig*") // 使用正则匹配包路径
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = {com.xl.common.config.SecurityConfig.class})
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+                classes = {com.xl.common.config.SecurityConfig.class, com.xl.common.config.SpringDocConfig.class})
 )
 public class XlGatewayApplication {
     public static void main(String[] args) {

@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment;
 
 @Configuration
 //@ComponentScan({"org.dromara.hmily"})
-@EnableAspectJAutoProxy(proxyTargetClass=true)
+//@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class HmilyConfig {
 //
 //    @Autowired
