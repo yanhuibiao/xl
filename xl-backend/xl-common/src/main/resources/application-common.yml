@@ -41,7 +41,7 @@ logging:  # spring框架的日志。日志配置
 #    org.apache.coyote.http11.Http11Processor: info
 #    org.apache.http: info
 #    org.apache.tomcat: info
-#    org.springframework: debug
+    org.springframework.security: debug
 #    com.chinamobile.cmss.bdpaas.resource.monitor: debug
 
 seata:

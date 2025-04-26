@@ -15,6 +15,8 @@ spring:
   config:
     import:
       - classpath:application-common.yml  # 导入common模块yml的配置
+      - classpath:application-druid.yml
+      - classpath:application-sharding.properties
       - optional:nacos:xl-transaction.yaml?group=DEFAULT_GROUP&refreshEnabled=true
   cloud:
     nacos:

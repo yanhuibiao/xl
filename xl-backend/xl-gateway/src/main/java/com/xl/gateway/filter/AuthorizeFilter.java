@@ -67,7 +67,7 @@ public class AuthorizeFilter implements GlobalFilter {
         ObjectMapper objectMapper = new ObjectMapper();
         DataBuffer wrap = null;
         try {
-            wrap = bufferFactory.wrap(objectMapper.writeValueAsBytes(ResponseEntity.errorResult(ResponseCodeEnum.TOKEN_EXPIRE)));
+            wrap = bufferFactory.wrap(objectMapper.writeValueAsBytes(ResponseEntity.errorResult(ResponseCodeEnum.TOKEN_INVALID)));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

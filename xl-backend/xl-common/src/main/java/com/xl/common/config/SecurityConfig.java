@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,7 @@ public class SecurityConfig {
     }
 
     SpringSecurityAccessDeniedHandler springSecurityAccessDeniedHandler = new SpringSecurityAccessDeniedHandler();
-    SpringSecurityAuthenticationEntryPoint securityAuthenticationEntryPoint = new SpringSecurityAuthenticationEntryPoint();
+    SpringSecurityAuthenticationEntryPoint springSecurityAuthenticationEntryPoint = new SpringSecurityAuthenticationEntryPoint();
 
     // 应用端点的安全配置（优先级高）
     @Bean
@@ -38,15 +39,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()  // 禁用csrf
-//                .formLogin().disable()  // 关闭默认登录
-//                .securityMatcher("/api/**")  // 仅匹配应用端点
+                // .formLogin().disable()  // 关闭默认登录
+                // .securityMatcher("/api/**")  // 仅匹配应用端点
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()   // 禁止session
-                .exceptionHandling().authenticationEntryPoint(securityAuthenticationEntryPoint) // 处理未认证异常
+                .exceptionHandling().authenticationEntryPoint(springSecurityAuthenticationEntryPoint) // 处理未认证异常
                 .accessDeniedHandler(springSecurityAccessDeniedHandler)  // 处理权限不足异常
-                .and().authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();
-        http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/*","/swagger-ui.html",
-                        "/swagger-ui/**", "/api-docs/**").permitAll()
-                .requestMatchers("/admin/register").permitAll().anyRequest().authenticated());
+                .and().authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();  //运行跨域请求
+        http.authorizeHttpRequests(auth ->
+                auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/actuator",
+                                "/actuator/**","/admin/register","/auth/**").permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/druid/**")).permitAll().anyRequest().authenticated());
+// Spring Security 6.x会尝试判断该路径是Spring MVC端点还是普通Servlet端点。由于Druid的监控页面通过独立的StatViewServlet注册（映射到 /druid/*），
+// 而Spring MVC的DispatcherServlet通常映射到根路径/，此时Spring Security无法自动确定应使用MvcRequestMatcher还是AntPathRequestMatcher，导致匹配规则失效
+// requestMatchers("/**").hasRole("ADMIN") 要求需要有admin权限
         http.addFilterBefore(JwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

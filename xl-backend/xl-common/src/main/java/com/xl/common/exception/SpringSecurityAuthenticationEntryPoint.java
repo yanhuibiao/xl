@@ -23,7 +23,7 @@ public class SpringSecurityAuthenticationEntryPoint implements AuthenticationEnt
         // 2. 自定义响应内容（如 JSON 格式）
         Map<String, Object> result = new HashMap<>();
         result.put("code", 401);
-        result.put("message", "There is no permission to access the path");
+        result.put("message", authException.getMessage());
         // 3. 序列化并写入响应
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(result));

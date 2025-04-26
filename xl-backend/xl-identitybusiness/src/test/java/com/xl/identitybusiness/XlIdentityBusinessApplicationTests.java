@@ -23,7 +23,7 @@ class XlIdentityBusinessApplicationTests {
     @Test
     void saveCustomerTest1() {
         Customer customer = new Customer();
-        customer.setId("1231231");
+        customer.setId(1231231L);
         customer.setUsername("admin1");
         customer.setPassword("admin");
         int var1 = customerService.saveCustomer(customer);
@@ -41,7 +41,6 @@ class XlIdentityBusinessApplicationTests {
         boolean encode1 = passwordEncoder.matches("123456","$2a$10$i79oHfgNPQQK8hOz23juC.ZSGHx2LujEgLsMlS9epSW6dDB5T9jnK");
         System.out.println("********************"+encode);
         System.out.println("********************"+encode1);
-
     }
 
 }

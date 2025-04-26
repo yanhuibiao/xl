@@ -10,6 +10,7 @@ spring:
   config:
     import:
       - classpath:application-common.yml  # 导入common模块yml的配置
+      - classpath:application-druid.yml
       - optional:nacos:xl-identitybusiness.yaml?group=DEFAULT_GROUP&refreshEnabled=true
   cloud:
     nacos:
