@@ -1,0 +1,148 @@
+mode:
+  type: Standalone
+  repository:
+    type: JDBC
+dataSources:
+  ds_master_0:
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.224.128:3306/xl_transaction_0
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: root
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+  ds_master_1:
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.224.128:3306/xl_transaction_1
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: root
+  ds_slave_0:
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.224.128:3307/xl_transaction_0
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: root
+  ds_slave_1:
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.224.128:3307/xl_transaction_1
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: root
+rules:
+  - !SHARDING
+    tables: # 数据分片规则配置
+      trade_order: # 逻辑表名称
+        actualDataNodes: ds_master_$->{0..1}.trade_order$->{0..1}  # 由数据源名 + 表名组成（参考 Inline 语法规则）
+        databaseStrategy: # 分库策略，缺省表示使用默认分库策略，以下的分片策略只能选其一
+          standard: # 用于单分片键的标准分片场景
+            shardingColumn: payer_id  # 分片列名称
+            shardingAlgorithmName: trade_order_database_inline # 分片算法名称
+#          complex: # 用于多分片键的复合分片场景
+#            shardingColumns: # 分片列名称，多个列以逗号分隔
+#            shardingAlgorithmName: # 分片算法名称
+#          hint: # Hint 分片策略
+#            shardingAlgorithmName: # 分片算法名称
+#          none: # 不分片
+        tableStrategy: # 分表策略，同分库策略
+          standard:
+            shardingColumn: payer_id
+            shardingAlgorithmName: trade_order_table_inline
+        keyGenerateStrategy: # 分布式序列策略
+          column: id  # 自增列名称，缺省表示不使用自增主键生成器
+          keyGeneratorName: snowflake_customize # 分布式序列算法名称
+        auditStrategy: # 分片审计策略
+          auditorNames: # 分片审计算法名称
+            - sharding_key_required_auditor
+          allowHintDisable: true # 是否禁用分片审计hint
+      trade_entry:
+        actualDataNodes: ds_master_${0..1}.trade_entry${0..1}
+        databaseStrategy:
+          standard:
+            shardingColumn: account_no
+            shardingAlgorithmName: trade_entry_database_inline
+        tableStrategy:
+          standard:
+            shardingColumn: account_no
+            shardingAlgorithmName: trade_entry_table_inline
+        keyGenerateStrategy:
+          column: id
+          keyGeneratorName: snowflake_customize
+#    autoTables: # 自动分片表规则配置
+#      t_order_auto: # 逻辑表名称
+#        actualDataSources (?): # 数据源名称
+#        shardingStrategy: # 切分策略
+#          standard: # 用于单分片键的标准分片场景
+#            shardingColumn: # 分片列名称
+#            shardingAlgorithmName: # 自动分片算法名称
+#    bindingTables (+): # 绑定表规则列表
+#      - <logic_table_name_1, logic_table_name_2, ...>
+#      - <logic_table_name_1, logic_table_name_2, ...>
+#    defaultDatabaseStrategy: # 默认数据库分片策略
+#    defaultTableStrategy: # 默认表分片策略
+#    defaultKeyGenerateStrategy: # 默认的分布式序列策略
+#    defaultShardingColumn: # 默认分片列名称
+    # 分片算法配置
+    shardingAlgorithms:
+      trade_order_database_inline: # 分片算法名称,# type 和 props，请参考分片内置算法：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/builtin-algorithm/sharding/
+        type: INLINE  # 分片算法类型
+        props: # 分片算法属性配置
+          algorithm-expression: ds_master_${payer_id % 2}
+      trade_entry_database_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds_master_${account_no % 2}
+      trade_order_table_inline:
+        type: INLINE
+        props:
+          algorithm-expression: trade_order_${payer_id % 2}
+      trade_entry_table_inline:
+        type: INLINE
+        props:
+          algorithm-expression: trade_entry_${account_no % 2}
+    # 分布式序列算法配置
+    keyGenerators:
+      snowflake_customize: # 分布式序列算法名称
+        type: SNOWFLAKE # 分布式序列算法类型
+#        props: # 分布式序列算法属性配置
+#    # 分片审计算法配置
+#    auditors:
+#      <sharding_audit_algorithm_name> (+): # 分片审计算法名称
+#        type: # 分片审计算法类型
+#        props: # 分片审计算法属性配置
+#  - !BROADCAST
+#    tables: # 广播表规则列表
+#      - <table_name>
+#      - <table_name>
+  - !READWRITE_SPLITTING  #读写分离
+    dataSources:
+      ds_master_0: # 读写分离逻辑数据源名称，默认使用 Groovy 的行表达式 SPI 实现来解析
+        writeDataSourceName: ds_master_0 # 写库数据源名称，默认使用 Groovy 的行表达式 SPI 实现来解析
+        readDataSourceNames: [ds_slave_0] # 读库数据源名称，多个从数据源用逗号分隔，默认使用 Groovy 的行表达式 SPI 实现来解析
+        transactionalReadQueryStrategy: PRIMARY # 事务内读请求的路由策略，可选值：PRIMARY（路由至主库）、FIXED（同一事务内路由至固定数据源）、DYNAMIC（同一事务内路由至非固定数据源）。默认值：DYNAMIC
+        loadBalancerName: random_customize  # 负载均衡算法名称
+      ds_master_1:
+        writeDataSourceName: ds_master_1
+        readDataSourceNames: [ds_slave_1]
+#          - ds_slave_1
+        transactionalReadQueryStrategy: PRIMARY
+        loadBalancerName: random_customize
+    loadBalancers:  # 负载均衡算法配置
+      random_customize: # 负载均衡算法名称
+        type: RANDOM  # 负载均衡算法类型
+#        props: # 负载均衡算法属性配置
+  # 不需要分表的配置
+#  - !SINGLE
+#    tables:  # YamlSingleRuleConfiguration
+#      - "ds_0.*"
+#    defaultDataSource: ds_0 # 只用于create table 生效
+props:
+  sql-show: true
+  data-source-properties:
+    type: com.alibaba.druid.pool.DruidDataSource

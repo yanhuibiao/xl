@@ -46,7 +46,8 @@ public class TradeOrderServiceImpl extends ServiceImpl<TradeOrderMapper, TradeOr
     @Override
     public void updateTradeOrder(TradeOrder tradeOrder) {
         UpdateWrapper<TradeOrder> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("order_no", tradeOrder.getOrderNo());
+        updateWrapper.eq("order_no", tradeOrder.getOrderNo())
+                .eq("payer_id", tradeOrder.getPayerId());  //这里加payer_id条件是因为分表规则依赖这个字段
         tradeOrderMapper.update(tradeOrder,updateWrapper);
     }
 

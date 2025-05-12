@@ -2,14 +2,21 @@ package com.xl.common.config;
 
 import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure;
 import com.alibaba.druid.spring.boot3.autoconfigure.properties.DruidStatProperties;
+import com.alibaba.druid.spring.boot3.autoconfigure.stat.DruidFilterConfiguration;
+import com.alibaba.druid.spring.boot3.autoconfigure.stat.DruidSpringAopConfiguration;
+import com.alibaba.druid.spring.boot3.autoconfigure.stat.DruidStatViewServletConfiguration;
+import com.alibaba.druid.spring.boot3.autoconfigure.stat.DruidWebStatFilterConfiguration;
 import com.alibaba.druid.util.Utils;
 import jakarta.servlet.*;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
 
@@ -17,6 +24,10 @@ import java.io.IOException;
 @Configuration
 @ConditionalOnWebApplication
 @AutoConfigureAfter(DruidDataSourceAutoConfigure.class)
+//下面两行，重新开启被shardingsphere排除的druid配置,不排除会报Error creating bean with name '**Mapper'：Property 'sqlSessionFactory' or 'sqlSessionTemplate' are required
+@EnableConfigurationProperties({DruidStatProperties.class, DataSourceProperties.class})
+// 排除后重新导入
+@Import({DruidSpringAopConfiguration.class, DruidStatViewServletConfiguration.class, DruidWebStatFilterConfiguration.class, DruidFilterConfiguration.class})
 @ConditionalOnProperty(name = "spring.datasource.druid.stat-view-servlet.enabled", havingValue = "true", matchIfMissing = true)
 public class RemoveDruidAdConfig {
 

@@ -2,8 +2,11 @@ package com.xl.common.dubbo.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xl.common.enums.IdentityStatus;
 import lombok.Data;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 
 @Data
 @TableName("customer")
@@ -16,7 +19,8 @@ public class Customer extends BasePojo {
     Integer age;
     @TableField("sex")
     String gender;
-    @JsonIgnore  // 该字段不会出现在 JSON 响应中
+//    @JsonIgnore  // 该字段不会出现在 JSON 响应中
+    @JsonProperty(access = WRITE_ONLY)  // 前端可传该字段，但不会出现在返回结果
     @TableField("security_credential")
     String password;
     String phone;

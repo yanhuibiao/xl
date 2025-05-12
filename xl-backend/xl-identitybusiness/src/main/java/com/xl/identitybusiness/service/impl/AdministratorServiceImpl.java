@@ -64,7 +64,7 @@ public class AdministratorServiceImpl extends ServiceImpl<AdministratorMapper, A
         try {
             administratorMapper.insert(administrator);
         }catch (DuplicateKeyException e){
-            throw new BusinessException(ResponseCodeEnum.DATA_INTEGRITY_VIOLATION);
+            throw new BusinessException(ResponseCodeEnum.DATA_EXIST);
         }
         return administrator.getId();   //id回填
     }

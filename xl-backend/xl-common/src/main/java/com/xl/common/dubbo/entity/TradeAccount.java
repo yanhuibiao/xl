@@ -30,7 +30,8 @@ public class TradeAccount extends BasePojo {
      * 主键ID
      */
 
-    @TableId(value = "id", type = IdType.AUTO)
+//    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -89,7 +90,7 @@ public class TradeAccount extends BasePojo {
     }
 
     public static abstract class TradeAccountStatus {
-        public static final Integer ACTIVE = 0;
-        public static final Integer Frozen = 1;
+        public static final Integer PENDING_ACTIVE = 0;
+        public static final Integer ACTIVE = 1;
     }
 }

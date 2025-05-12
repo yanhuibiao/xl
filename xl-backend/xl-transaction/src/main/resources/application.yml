@@ -1,5 +1,3 @@
-xl:
-  db: /xl_transaction
 server:
   port: 18082
   servlet:
@@ -7,16 +5,15 @@ server:
 spring:
   application:
     name: xl-transaction
-  datasource:
-    url: jdbc:mysql://192.168.224.128:3306/?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://192.168.224.128:3306/?useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   config:
     import:
       - classpath:application-common.yml  # 导入common模块yml的配置
-      - classpath:application-druid.yml
-      - classpath:application-sharding.properties
+      - classpath:application-sharding.yaml  # shardingsphere boot start依赖配置
       - optional:nacos:xl-transaction.yaml?group=DEFAULT_GROUP&refreshEnabled=true
   cloud:
     nacos:

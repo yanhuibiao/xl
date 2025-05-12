@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Generator {
@@ -95,5 +96,26 @@ public class Generator {
         }
         return TENANTID + STRIPS + timestamp + String.format("%04d", sequence);
     }
+
+    /**
+     * 生成10位数的id
+     * @return
+     */
+    public static synchronized String generateIdentityId() {
+        // 时间戳占6位（秒级，约64秒循环），随机数占4位
+        final int MAX_TIMESTAMP = (1 << 6) - 1;
+        final int MAX_RANDOM = (1 << 4) - 1;
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        long currentTimestamp = (System.currentTimeMillis() / 1000) % (1 << 6);
+        for (;;) {
+            int random = ThreadLocalRandom.current().nextInt(MAX_RANDOM + 1);
+            long id = (currentTimestamp << 4) | random;
+
+            if (id <= 9999999999L) {  // 确保是10位数
+                return TENANTID + STRIPS + timestamp + String.format("%010d", id);
+            }
+        }
+    }
+
 
 }

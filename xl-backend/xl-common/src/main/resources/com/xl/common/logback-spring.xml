@@ -9,7 +9,7 @@
                     defaultValue="defaultAppName"/>
     <!-- 格式化输出：%date表示日期(可缩写成%d，后同)，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
     <!-- %logger{36} 表示 Logger 名字最长36个字符 ,%highlight 高亮 -->
-    <property name="LOG_PATTERN" value="%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n){TRACE=CYAN, DEBUG=GREEN, INFO=BLUE, WARN=YELLOW, ERROR=RED}"/>
+    <property name="LOG_PATTERN" value="%highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{136} - %msg%n){TRACE=CYAN, DEBUG=GREEN, INFO=BLUE, WARN=YELLOW, ERROR=RED}"/>
     <property name="LOG_PATH" value="C:\Users\77238\Desktop\log\${APP_NAME}\"/>
     <property name="LOG_MaxHistory" value="30"/>
 

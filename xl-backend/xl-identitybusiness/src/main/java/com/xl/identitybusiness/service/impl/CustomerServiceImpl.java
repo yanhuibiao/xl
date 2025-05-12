@@ -62,7 +62,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         // 创建客户实体
         String accountId = Generator.generateNumberId();
-        String identityId = Generator.generateNumberId();
+        String identityId = Generator.generateIdentityId();
         customer.setIdentityType("1000");
         customer.setStatus(IdentityStatus.PendingActive);
         customer.setAccountNo(accountId);

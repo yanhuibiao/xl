@@ -44,7 +44,7 @@ public class TransferTCCServiceImpl implements TransferTCCService {
     // TCC实现类这里必须添加@GlobalTransactional，不然不会调confirm和rollback,
     // 不知道为啥这里seata一直使用CGLIB代理，没能使用JDK动态代理，所以要在实现类上加上TwoPhaseBusinessAction注解
     @Override
-    @GlobalTransactional
+    @GlobalTransactional(lockRetryInterval = 5000, lockRetryTimes = 3)
     @TwoPhaseBusinessAction(name = "transferTCCAction",commitMethod = "commit",rollbackMethod = "rollback")
     public void transferPrepare(@BusinessActionContextParameter(paramName = "debitAccount") TradeAccount debitAccount,
                                 @BusinessActionContextParameter(paramName = "creditAccount") TradeAccount creditAccount,
@@ -75,7 +75,7 @@ public class TransferTCCServiceImpl implements TransferTCCService {
     }
 
     @Override
-    @Transactional
+    @Transactional(timeout = 6000)
     public boolean commit(BusinessActionContext context) {
         String xid = context.getXid();
         TempTransaction tempTransaction = tempTransactionService.getTempTransactionByXid(xid);
