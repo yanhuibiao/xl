@@ -30,18 +30,17 @@ public class CommonTest {
 
     @Test
     void test3(){
-        System.out.println(NacosConfigUtil.getYamlConfig("redis","DEFAULT_GROUP","spring.data.redis.host"));
+        System.out.println(NacosConfigUtil.getInstance().getYamlConfig("xl-gateway", "DEFAULT_GROUP","test.test11"));
     }
 
     @Test
     void test4(){
-        NacosConfigUtil a = new NacosConfigUtil("redis", "DEFAULT_GROUP","spring.data.redis.host");
-        a.addYamlListener();
+        NacosConfigUtil.getInstance().addYamlListener("xl-gateway", "DEFAULT_GROUP","test.test11");
         // 保持程序运行以监听配置变化
         while (true) {
             try {
                 Thread.sleep(3000);
-                System.out.println(a.propertiesValue);
+                System.out.println(NacosConfigUtil.getInstance().propertiesValue);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

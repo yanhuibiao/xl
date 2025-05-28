@@ -1,6 +1,7 @@
 package com.xl.common.utils;
 
 import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -8,56 +9,101 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.rabbitmq.client.Connection;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 public class NacosConfigUtil {
 
     private static final String SERVER_ADDR = "192.168.224.128:8848"; // Nacos 服务器地址
-    private static ConfigService configService;
-    private static NamingService namingService;
-    public String data_id;
-    public String group;
-    public String propertiesKey;
-    public String propertiesValue;
-    public String propertiesTempValue;
+    private static final String NAMESPACE = ""; // 可选："" 表示默认命名空间
+    private static final String DEFAULT_GROUP = "DEFAULT_GROUP";
+    private static final long TIMEOUT_MS = 5000;
 
-    static {
+    public ConfigService configService;
+    public NamingService namingService;
+    public String propertiesValue;
+    public ConcurrentHashMap<String, Listener> configListenerMap = new ConcurrentHashMap<>();
+
+    private NacosConfigUtil() {
         try {
-            System.out.println("static exec");
             Properties properties = new Properties();
             properties.put("serverAddr", SERVER_ADDR);
-//            指定Nacos-Server的地址
-//            properties.setProperty(PropertyKeyConst.SERVER_ADDR, "localhost:8848");
-//            指定Nacos-SDK的命名空间
+            properties.setProperty(PropertyKeyConst.USERNAME, "nacos");
 //            properties.setProperty(PropertyKeyConst.NAMESPACE, "${namespaceId}");
-            configService = NacosFactory.createConfigService(properties);
-            namingService = NacosFactory.createNamingService(SERVER_ADDR);
+            properties.setProperty(PropertyKeyConst.PASSWORD, "nacos");
+//            初始化配置中心的Nacos Java SDK(配置中心)
+            this.configService = NacosFactory.createConfigService(properties);
+//            初始化配置中心的Nacos Java SDK(服务注册与发现)
+            this.namingService = NacosFactory.createNamingService(SERVER_ADDR);
         } catch (NacosException e) {
-            e.printStackTrace();
+            throw new RuntimeException("初始化 NacosConfigUtil 失败", e);
         }
     }
 
-    public NacosConfigUtil(String data_id, String group, String propertiesKey) {
-        this.data_id = data_id;
-        this.group = group;
-        this.propertiesKey = propertiesKey;
-        this.propertiesValue = getYamlConfig(data_id,group,propertiesKey);
+    private static class Holder {
+        private static final NacosConfigUtil INSTANCE = new NacosConfigUtil();
     }
 
-    public static String getConfig(String data_id , String group, long timeoutMs) {
+    // 单例模式
+    public static NacosConfigUtil getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    /**
+     * 查询配置
+     * @param dataId
+     * @param group  DEFAULT_GROUP
+     * @param timeoutMs ms
+     * @return String
+     */
+    public String getConfig(String dataId , String group, long timeoutMs) {
         try {
-            return configService.getConfig(data_id, group, timeoutMs);
+            return configService.getConfig(dataId, group, timeoutMs);
         } catch (NacosException e) {
-            e.printStackTrace();
-            return "";
+            throw new RuntimeException("获取配置失败: " + dataId, e);
         }
     }
 
-    public static String getPropertiesConfig(String data_id ,String group,String key,long timeoutMs) {
+    public String getConfig(String dataId) {
+        return getConfig(dataId, DEFAULT_GROUP, TIMEOUT_MS);
+    }
+
+    /**
+     * 发布配置
+     */
+    public boolean publishConfig(String dataId, String group, String content) {
+        try {
+            return configService.publishConfig(dataId, group, content);
+        } catch (NacosException e) {
+            throw new RuntimeException("发布配置失败: " + dataId, e);
+        }
+    }
+
+    public boolean publishConfig(String dataId, String content) {
+        return publishConfig(dataId, DEFAULT_GROUP, content);
+    }
+
+    /**
+     * 删除配置
+     */
+    public boolean removeConfig(String dataId,String group) {
+        try {
+            return configService.removeConfig(dataId, group);
+        } catch (NacosException e) {
+            throw new RuntimeException("删除配置失败: " + dataId, e);
+        }
+    }
+
+    public boolean removeConfig(String dataId) {
+        return removeConfig(dataId, DEFAULT_GROUP);
+    }
+
+    public String getPropertiesConfig(String data_id ,String group,String key,long timeoutMs) {
         Properties properties = new Properties();
         String config = getConfig(data_id, group, timeoutMs);
         try {
@@ -69,8 +115,8 @@ public class NacosConfigUtil {
         }
     }
 
-    public static String getPropertiesConfig(String data_id ,String group,String key) {
-        return getPropertiesConfig(data_id,group,key,5000);
+    public String getPropertiesConfig(String data_id ,String group,String key) {
+        return getPropertiesConfig(data_id,group,key,TIMEOUT_MS);
     }
 
     /**
@@ -81,7 +127,7 @@ public class NacosConfigUtil {
      * @param timeoutMs
      * @return
      */
-    public static String getYamlConfig(String data_id ,String group,String key,long timeoutMs) {
+    public String getYamlConfig(String data_id ,String group,String key,long timeoutMs) {
         YAMLMapper yamlMapper = new YAMLMapper();
         String config = getConfig(data_id, group, timeoutMs);
         JsonNode yamlNode = null;
@@ -94,46 +140,59 @@ public class NacosConfigUtil {
         }
     }
 
-    public static String getYamlConfig(String data_id ,String group,String key) {
+    public String getYamlConfig(String data_id ,String group,String key) {
         return getYamlConfig(data_id,group,key,5000);
     }
 
-    public static String getJsonNodeKey(JsonNode jsonNode,String key){
+    /**
+     *
+     * @param jsonNode
+     * @param key
+     * @return
+     */
+    public String getJsonNodeKey(JsonNode jsonNode,String key){
         String[] keys = key.split("\\.");
         for (int i = 1; i < keys.length; i++) {
             jsonNode = jsonNode.get(keys[i-1]);
         }
         return jsonNode.get(keys[keys.length-1]).asText();
     }
+
     /**
-     * 监听某个参数的变化
+     * 监听某个参数的变化，将变化的值返回给实例的propertiesValue属性
      */
-    public void addYamlListener(){
-        final NacosConfigUtil nacosConfigUtil = this;
+    public void addYamlListener(String dataId , String group, String key) {
+        Listener listener = new Listener(){
+            // 返回 null 表示使用默认的执行器
+            @Override
+            public Executor getExecutor() {
+                return null;
+            }
+            // 在这里处理配置变化的逻辑
+            @Override
+            public void receiveConfigInfo(String configInfo) {
+                YAMLMapper yamlMapper = new YAMLMapper();
+                try {
+                    JsonNode yamlNode = yamlMapper.readTree(configInfo);
+                    NacosConfigUtil.getInstance().propertiesValue = getJsonNodeKey(yamlNode, key);
+                } catch (Exception e) {
+                    throw new RuntimeException("nacos 监听配置出现问题",e);
+                }
+            }
+        };
+        this.configListenerMap.put(dataId+"_"+group, listener);
         try {
-            configService.addListener(this.data_id, this.group, new Listener() {
-                // 返回 null 表示使用默认的执行器
-                @Override
-                public Executor getExecutor() {
-                    return null;
-                }
-                // 在这里处理配置变化的逻辑
-                @Override
-                public void receiveConfigInfo(String configInfo) {
-                    YAMLMapper yamlMapper = new YAMLMapper();
-                    try {
-                        JsonNode yamlNode = yamlMapper.readTree(configInfo);
-                        nacosConfigUtil.propertiesValue = getJsonNodeKey(yamlNode,nacosConfigUtil.propertiesKey);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            this.configService.addListener(dataId, group, listener);
         } catch (NacosException e) {
             e.printStackTrace();
         }
     }
 
+    public void removeYamlListener(String dataId ,String group) {
+        this.configService.removeListener(dataId, group, configListenerMap.get(dataId+"_"+group));
+    }
 
-
+    public void registerInstance(String serviceName, String groupName, String ip, int port, String clusterName) throws NacosException {
+        this.namingService.registerInstance(serviceName, groupName, ip,port, clusterName);
+    }
 }

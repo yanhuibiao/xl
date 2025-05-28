@@ -1,0 +1,52 @@
+server:
+  port: 18082
+  servlet:
+    context-path: /trans
+spring:
+  application:
+    name: xl-transaction
+#  datasource:
+#    url: jdbc:mysql://192.168.224.128:3306/?useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    import:
+      - classpath:application-common.yml  # 导入common模块yml的配置
+      - classpath:application-sharding.yaml  # shardingsphere boot start依赖配置
+      - optional:nacos:xl-transaction.yaml?group=DEFAULT_GROUP&refreshEnabled=true
+  cloud:
+    nacos:
+      server-addr: 192.168.224.128:8848 # 注册Nacos地址
+      username: nacos
+      password: nacos
+      #      config:
+      #        server-addr: 192.168.224.128:8848  # Nacos地址，可忽略
+      #      # file-extension: yaml # 配置文件后缀名
+      #      # ${spring.application.name}-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}`作为文件id，来读取配置。
+      discovery:
+        cluster-name: default
+        namespace: # 命名空间，填ID
+#2021.0.5版本的 Spring Cloud 默认不再启用 bootstrap包
+
+# dubbo注册地址
+dubbo:
+  protocol:
+    name: dubbo
+    port: 20882
+  registry:
+    address: nacos://192.168.224.128:8848?namespace=public&group=DUBBO_GROUP&username=nacos&password=nacos
+    use-as-metadata-center: false #关闭dubbo自己在nacos创建配置
+  #    address: spring-cloud://localhost   #使用spring cloud中的注册中心
+  scan:
+    base-packages: com.xl.transactionservice.service   # 指定实现服务的包
+  consumer:
+    check: false
+  application:   #Qos=Quality of Service，qos是Dubbo的在线运维命令，可以对服务进行动态的配置、控制及查询
+    qos-enable: false    #是否启动QoS
+    serialize-check-status: WARN
+    name: ${spring.application.name}-dubbo
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql
+  mapper-locations: classpath*:/com/xl/**/mapper/*.xml

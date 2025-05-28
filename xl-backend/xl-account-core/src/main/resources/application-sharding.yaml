@@ -1,0 +1,111 @@
+spring:
+#  main:
+#    allow-bean-definition-overriding: true
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceAutoConfigure
+  datasource:
+    druid:
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: false
+      max-pool-prepared-statement-per-connection-size: -1
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      filters: stat,wall,slf4j
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.png,*.css,*.ico
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: druid
+        login-password: druid
+  shardingsphere:
+    datasource:
+      names: ds_master_0,ds_master_1,ds_slave_0,ds_slave_1
+#      default-data-source-name: ds_master_0
+      ds_master_0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.224.128:3306/xl_account_0
+        username: root
+        password: root
+        initialSize: 5
+        minIdle: 5
+        maxActive: 20
+        maxWait: 60000
+      ds_master_1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.224.128:3306/xl_account_1
+        username: root
+        password: root
+      ds_slave_0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.224.128:3307/xl_account_0
+        username: root
+        password: root
+      ds_slave_1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.224.128:3307/xl_account_1
+        username: root
+        password: root
+    rules:
+      sharding:
+        default-database-strategy:
+          standard:
+#            sharding-column:
+            sharding-algorithm-name: default_database_inline
+        tables:
+          trade_account:
+            actual-data-nodes: ds_master_${0..1}.trade_account_${0..1}
+            database-strategy:
+              standard:
+                sharding-column: account_no
+                sharding-algorithm-name: trade_account_database_inline
+            table-strategy:
+              standard:
+                sharding-column: account_no
+                sharding-algorithm-name: trade_account_table_inline
+        sharding-algorithms:
+          trade_account_database_inline:
+            type: HASH_MOD
+            props:
+              sharding-count: 2
+          trade_account_table_inline:
+            type: INLINE
+            props:
+              algorithm-expression: trade_account_${Long.parseLong(account_no.substring(Math.max(account_no.length()-3, 1))) % 2}
+          default_database_inline:
+            type: INLINE
+            props:
+              algorithm-expression: ds_master_0
+      readwrite-splitting:
+        data-sources:
+          ds0:
+            static-strategy:
+              write-data-source-name: ds_master_0
+              read-data-source-names:
+                - ds_slave_0
+            load-balancer-name: round_robin
+          ds1:
+            static-strategy:
+              write-data-source-name: ds_master_1
+              read-data-source-names:
+                - ds_slave_1
+            load-balancer-name: round_robin
+        load-balancers:
+          round_robin:
+            type: ROUND_ROBIN
+    props:
+      sql-show: true
+#      sql-simple: true
+      # 开启负载均衡日志
+      execution-log:
+        enabled: true
+        level: DEBUG

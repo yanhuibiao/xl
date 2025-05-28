@@ -109,6 +109,15 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <type>jar</type>
+            <exclusions>
+<!-- Found multiple occurrences of org.json.JSONObject on the class path:-->
+<!-- jar:file:/C:/Users/77238/.m2/repository/org/json/json/20220320/json-20220320.jar!/org/json/JSONObject.class-->
+<!-- jar:file:/C:/Users/77238/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class-->
+                <exclusion>
+                    <groupId>org.json</groupId>
+                    <artifactId>json</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--  jwt -->
         <dependency>
@@ -185,6 +194,22 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-3-starter</artifactId>
+        </dependency>
+<!--        rabbitmq-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>3.5.0</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.rabbitmq</groupId>-->
+<!--            <artifactId>amqp-client</artifactId>-->
+<!--            <version>5.25.0</version>-->
+<!--        </dependency>-->
+<!--        连接池管理rabbtiMq-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
     </dependencies>
 

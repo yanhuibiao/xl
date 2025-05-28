@@ -6,9 +6,12 @@
     <modules>
         <module>xl-gateway</module>
         <module>xl-common</module>
-        <module>xl-identitybusiness</module>
+        <module>xl-identity-business</module>
         <module>xl-deploy</module>
-        <module>xl-transaction</module>
+        <module>xl-transaction-service</module>
+        <module>xl-customer-center</module>
+        <module>xl-account-core</module>
+        <module>xl-order-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

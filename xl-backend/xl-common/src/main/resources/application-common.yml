@@ -4,6 +4,49 @@ spring:
 #    username: root
 #    password: root
 #    driver-class-name: com.mysql.cj.jdbc.Driver
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration #已经自己重写了Rabbit配置
+  rabbitmq:
+    host: 192.168.224.128
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+    # 连接池配置
+    connection-timeout: 5000
+    cache:
+      channel:
+        size: 50
+        checkout-timeout: 1000
+      connection:
+        mode: CONNECTION
+        size: 5
+    # 生产者配置
+    publisher-confirm-type: correlated  # 发送方确认模式
+    publisher-returns: true             # 开启返回机制
+    template:
+      mandatory: true                   # 消息不可达时返回给生产者
+      retry:
+        enabled: true                   # 发送失败时重试
+        initial-interval: 1000         # 初始间隔(ms)
+        max-interval: 10000             # 最大间隔(ms)
+        multiplier: 2.0                # 间隔乘数
+        max-attempts: 3                 # 最大重试次数
+    # 消费者配置
+    listener:
+      type: simple                     # 监听器类型
+      simple:
+        acknowledge-mode: manual        # 开启消费者确认，手动确认
+        concurrency: 5                 # 最小消费者数量
+        max-concurrency: 10            # 最大消费者数量
+        prefetch: 50                   # 每个消费者最大预取消息数
+        retry:
+          enabled: true                # 消费失败重试
+          max-attempts: 3              # 消费最大重试次数
+          initial-interval: 1000       # 初始间隔(ms)
+          max-interval: 10000          # 最大间隔(ms)
+          multiplier: 2.0              # 间隔乘数
+        default-requeue-rejected: true # 被拒绝的消息是否重新放回队列。默认值为 true
   data:
     redis:  #Redis相关配置
       host: 192.168.224.128
