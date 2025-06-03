@@ -55,5 +55,15 @@
 <!--            <groupId>org.apache.dubbo</groupId>-->
 <!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
 <!--        </dependency>-->
+<!--        sms工具会用到，websocket-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <!-- Java EE WebSocket API -->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.websocket</groupId>-->
+<!--            <artifactId>jakarta.websocket-api</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 </project>

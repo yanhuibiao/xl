@@ -2,6 +2,9 @@ server:
   port: 18081
   servlet:
     context-path: /ib
+sms:
+  service:
+    port: 9223
 spring:
   application:
     name: xl-identitybusiness # 服务名称

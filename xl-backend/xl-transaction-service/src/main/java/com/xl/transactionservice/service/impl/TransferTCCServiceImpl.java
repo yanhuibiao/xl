@@ -28,16 +28,15 @@ import java.math.BigDecimal;
 @Service
 public class TransferTCCServiceImpl implements TransferTCCService {
 
-
+    @DubboReference
     public TradeAccountService tradeAccountService;
+    @DubboReference
     public TradeOrderService tradeOrderService;
+    @DubboReference
     public TradeEntryService tradeEntryService;
     public TempTransactionService tempTransactionService;
 
-    public TransferTCCServiceImpl(TradeAccountService tradeAccountService, TradeOrderService tradeOrderService, TradeEntryService tradeEntryService, TempTransactionService tempTransactionService) {
-        this.tradeAccountService = tradeAccountService;
-        this.tradeOrderService = tradeOrderService;
-        this.tradeEntryService = tradeEntryService;
+    public TransferTCCServiceImpl(TempTransactionService tempTransactionService) {
         this.tempTransactionService = tempTransactionService;
     }
 

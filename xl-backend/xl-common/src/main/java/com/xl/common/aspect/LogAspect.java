@@ -14,20 +14,22 @@ public class LogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
+//    && !execution(* com.xl.identitybusiness.sms.service.SmsWebSocketService.*(..)) 这个类是有ServerEndpoint注解不能被代理
     // 方法执行前 !@annotation(org.springframework.transaction.annotation.Transactional)
-    @Before("execution(* com.xl..*.*(..)) && !target(org.springframework.web.filter.GenericFilterBean)")
+    @Before("execution(* com.xl..*.*(..)) && !target(org.springframework.web.filter.GenericFilterBean)" +
+            "&& !execution(* com.xl..*..*WebSocketService.*(..))")
     public void logBefore(JoinPoint joinPoint) {
         logger.info("Method {} is about to be called with arguments: {}", joinPoint.getSignature(), joinPoint.getArgs());
     }
 
     // 方法执行后
-    @After("execution(* com.xl..*.*(..)) && !target(org.springframework.web.filter.GenericFilterBean)")
+    @After("execution(* com.xl..*.*(..)) && !target(org.springframework.web.filter.GenericFilterBean) && !execution(* com.xl..*..*WebSocketService.*(..))")
     public void logAfter(JoinPoint joinPoint) {
         logger.info("Method {} has been execution completed.", joinPoint.getSignature());
     }
 
     // 方法执行返回后
-    @AfterReturning(pointcut = "execution(* com.xl..*.*(..)) && !target(org.springframework.web.filter.GenericFilterBean)",
+    @AfterReturning(pointcut = "execution(* com.xl..*.*(..)) && !target(org.springframework.web.filter.GenericFilterBean) && !execution(* com.xl..*..*WebSocketService.*(..))",
             returning = "result")
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
         logger.info("Method {} executed successfully with return value: {}", joinPoint.getSignature(), result);

@@ -1,4 +1,4 @@
-package com.xl.identitybusiness.mapper;
+package com.xl.customercenter.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xl.common.dubbo.entity.Customer;

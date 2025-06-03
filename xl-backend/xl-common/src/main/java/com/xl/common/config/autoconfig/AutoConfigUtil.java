@@ -17,6 +17,8 @@ public class AutoConfigUtil {
         return new JwtUtils(jwtProperties);
     }
 
+
+
 //    @Bean
 //    public SmsTemplate smsTemplate(SmsProperties properties) {
 //        return new SmsTemplate(properties);

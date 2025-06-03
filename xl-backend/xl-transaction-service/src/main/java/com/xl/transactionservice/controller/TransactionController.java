@@ -34,11 +34,11 @@ public class TransactionController {
 
     @DubboReference
     CustomerService customerService;
+    @DubboReference
     TradeAccountService tradeAccountService;
     TransferTCCService transferTCCService;
 
-    public TransactionController(TradeAccountService tradeAccountService, TransferTCCService transferTCCService) {
-        this.tradeAccountService = tradeAccountService;
+    public TransactionController(TransferTCCService transferTCCService) {
         this.transferTCCService = transferTCCService;
     }
 

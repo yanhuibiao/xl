@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.xl.smstool.controller.SmsClientController"
+      spacing="20" alignment="CENTER" style="-fx-padding: 20">
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="服务器 IP:"/>
+        <TextField fx:id="serverIpField" promptText="请输入服务器IP" prefWidth="150"/>
+        <Label text="服务器端口:"/>
+        <TextField fx:id="serverPortField" promptText="请输入服务器端口" prefWidth="100"/>
+    </HBox>
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="MSISDN:"/>
+        <TextField fx:id="msisdnField" promptText="请输入msisdn" prefWidth="100"/>
+        <Label text="发送测试消息:"/>
+        <TextField fx:id="messageField" promptText="请输入消息" prefWidth="300"/>
+    </HBox>
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="connectButton" text="连接WebSocket" onAction="#connectWebSocket"/>
+        <Button fx:id="sendButton" text="发送消息" onAction="#sendMessage"/>
+        <Button text="清理消息" onAction="#clearMessage"/>
+    </HBox>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="接收到的短信:"/>
+    </HBox>
+    <TextArea fx:id="resultArea" prefHeight="350"/>
+</VBox>

@@ -1,68 +1,45 @@
 package com.xl.identitybusiness;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.github.gavlyukovskiy.boot.jdbc.decorator.DecoratedDataSource;
-import com.rabbitmq.client.DeliverCallback;
-import com.rabbitmq.client.Delivery;
-import com.xl.common.dubbo.entity.Customer;
+import com.xl.common.config.autoconfig.properties.SmsProperties;
 import com.xl.common.utils.RabbitMQUtil;
-import com.xl.identitybusiness.mapper.CustomerMapper;
-import com.xl.identitybusiness.service.impl.CustomerServiceImpl;
-import com.zaxxer.hikari.HikariDataSource;
+import com.xl.identitybusiness.sms.service.SmsWebSocketService;
 import org.apache.shardingsphere.driver.jdbc.core.datasource.ShardingSphereDataSource;
-import org.apache.shardingsphere.infra.datasource.props.DataSourceProperties;
 import org.apache.shardingsphere.infra.metadata.ShardingSphereMetaData;
 import org.apache.shardingsphere.mode.manager.ContextManager;
-import org.apache.shardingsphere.mode.metadata.MetaDataContexts;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
-import java.util.Map;
 
 @SpringBootTest(classes = {XlIdentityBusinessApplication.class})
 class XlIdentityBusinessApplicationTests {
     private static final Logger logger = LoggerFactory.getLogger(XlIdentityBusinessApplicationTests.class);
 
-    @Autowired
-    CustomerServiceImpl customerService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    CustomerMapper customerMapper;
 
     @Autowired
     RabbitMQUtil rabbitMQUtil;
-
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    SmsWebSocketService smsWebSocketService;
     @Autowired
     private DataSource dataSource;  // ShardingSphere 代理数据源
 //    @Autowired
 //    DataSourceProperties dataSourceProperties;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private Binding smsBinding;
 
 
-    @Test
-    void saveCustomerTest1() {
-        Customer customer = new Customer();
-        customer.setId(1231231L);
-        customer.setUsername("admin1");
-        customer.setPassword("admin");
-        int var1 = customerService.saveCustomer(customer);
-        System.out.println("********************"+var1);
-    }
-
-    @Test
-    void saveCustomerTest2() {
-        int var1 = customerService.saveCustomer("1231231","admin1","admin");
-        System.out.println("********************"+var1);
-    }
     @Test
     void test01(){
         String encode = passwordEncoder.encode("123456");
@@ -135,7 +112,16 @@ class XlIdentityBusinessApplicationTests {
                 e.printStackTrace();
             }
         });
-
     }
+
+    @Test
+    void testRabbitMQUtil5() throws Exception {
+        String jsonMessage = "{\"content\":\"Hello\"}";
+        rabbitMQUtil.sendMessage(SmsProperties.SMS_EXCHANGE,SmsProperties.SMS_ROUTING_KEY, jsonMessage,SmsProperties.SMS_QUEUE);
+        System.out.println(rabbitTemplate.getExchange());
+        System.out.println(rabbitTemplate.getRoutingKey());
+//        rabbitTemplate.convertAndSend(SmsProperties.SMS_EXCHANGE,SmsProperties.SMS_ROUTING_KEY, jsonMessage);
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.xl.transactionservice.mapper;
+package com.xl.accountcore.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xl.common.dubbo.entity.TradeAccount;

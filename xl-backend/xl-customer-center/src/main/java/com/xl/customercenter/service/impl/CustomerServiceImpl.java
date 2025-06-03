@@ -1,4 +1,4 @@
-package com.xl.identitybusiness.service.impl;
+package com.xl.customercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,12 +10,10 @@ import com.xl.common.dubbo.entity.TradeAccount;
 import com.xl.common.enums.IdentityStatus;
 import com.xl.common.exception.BusinessException;
 import com.xl.common.utils.Generator;
-import com.xl.identitybusiness.mapper.CustomerMapper;
+import com.xl.customercenter.mapper.CustomerMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.seata.core.context.RootContext;
-import org.apache.seata.spring.annotation.GlobalLock;
 import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 //@DubboService(filter = "-seata")
 @DubboService

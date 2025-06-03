@@ -1,4 +1,4 @@
-package com.xl.common.config.autoconfig;
+package com.xl.common.utils;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 

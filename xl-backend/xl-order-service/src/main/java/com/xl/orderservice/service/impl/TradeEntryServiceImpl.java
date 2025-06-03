@@ -1,4 +1,4 @@
-package com.xl.transactionservice.service.impl;
+package com.xl.orderservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -7,7 +7,8 @@ import com.xl.common.dubbo.api.TradeEntryService;
 import com.xl.common.dubbo.entity.TradeAccount;
 import com.xl.common.dubbo.entity.TradeEntry;
 import com.xl.common.dubbo.entity.TradeOrder;
-import com.xl.transactionservice.mapper.TradeEntryMapper;
+import com.xl.orderservice.mapper.TradeEntryMapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,12 @@ import java.util.List;
 @Service
 public class TradeEntryServiceImpl extends ServiceImpl<TradeEntryMapper, TradeEntry> implements TradeEntryService {
 
-    TradeEntryMapper tradeEntryMapper;
+    @DubboReference
     TradeAccountService tradeAccountService;
-    public TradeEntryServiceImpl(TradeEntryMapper tradeEntryMapper,TradeAccountService tradeAccountService) {
+    TradeEntryMapper tradeEntryMapper;
+
+    public TradeEntryServiceImpl(TradeEntryMapper tradeEntryMapper) {
         this.tradeEntryMapper = tradeEntryMapper;
-        this.tradeAccountService = tradeAccountService;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.xl.transactionservice.service.impl;
+package com.xl.accountcore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xl.common.dubbo.api.TradeAccountService;
 import com.xl.common.dubbo.api.CustomerService;
 import com.xl.common.dubbo.entity.TradeAccount;
-import com.xl.transactionservice.mapper.TradeAccountMapper;
+import com.xl.accountcore.mapper.TradeAccountMapper;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,7 +45,7 @@ public class AuthController {
     @Autowired
     private RedisTemplate<Object, Object>  redisTemplate;
 
-    @Autowired
+    @DubboReference
     CustomerService customerService;
 
     @Autowired

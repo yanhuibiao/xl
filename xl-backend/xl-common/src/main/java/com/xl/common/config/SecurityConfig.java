@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .and().authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS).permitAll();  //运行跨域请求
         http.authorizeHttpRequests(auth ->
                 auth.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/api-docs/**", "/actuator",
-                                "/actuator/**","/admin/register","/auth/**").permitAll()
+                                "/actuator/**","/admin/register","/auth/**","/ws/**").permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/druid/**")).permitAll().anyRequest().authenticated());
 // Spring Security 6.x会尝试判断该路径是Spring MVC端点还是普通Servlet端点。由于Druid的监控页面通过独立的StatViewServlet注册（映射到 /druid/*），
 // 而Spring MVC的DispatcherServlet通常映射到根路径/，此时Spring Security无法自动确定应使用MvcRequestMatcher还是AntPathRequestMatcher，导致匹配规则失效

@@ -1,6 +1,7 @@
 package com.xl.common.config.autoconfig;
 
 import com.xl.common.config.autoconfig.properties.RabbitMQProperties;
+import com.xl.common.config.autoconfig.properties.SmsProperties;
 import com.xl.common.utils.RabbitMQUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +85,15 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(delayedQueue())
                 .to(delayedExchange())
                 .with("delayed.routing.key").noargs();
+    }
+
+    @Bean
+    public Binding smsBinding() {
+        DirectExchange smsExchange = new DirectExchange(SmsProperties.SMS_EXCHANGE, true, false);
+        Queue smsQueue = QueueBuilder.durable(SmsProperties.SMS_QUEUE).build();
+        return BindingBuilder.bind(smsQueue)
+                .to(smsExchange)
+                .with(SmsProperties.SMS_ROUTING_KEY);
     }
 
     // 消息转换器
