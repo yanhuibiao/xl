@@ -105,7 +105,7 @@ public class SmsClientController {
      */
     @OnMessage
     public void onMessage(String message) {
-        appendMessage("Received: " + message);
+        appendMessage(message);
     }
 
     /**

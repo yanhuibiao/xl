@@ -6,12 +6,18 @@
         <groupId>com.xl</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <packaging>pom</packaging><!-- 父模块打包类型为pom -->
+    <modules>
+        <module>sms-service</module>
+        <module>identity-service</module>
+    </modules>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>xl-identity-business</artifactId>
 <!--    <packaging>pom</packaging>-->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <com.xl.version>0.0.1-SNAPSHOT</com.xl.version>
     </properties>
     <dependencies>
         <dependency>
@@ -66,4 +72,13 @@
 <!--            <artifactId>jakarta.websocket-api</artifactId>-->
 <!--        </dependency>-->
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

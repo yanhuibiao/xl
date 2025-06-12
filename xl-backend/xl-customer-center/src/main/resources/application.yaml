@@ -1,7 +1,7 @@
 server:
   port: 18084
   servlet:
-    context-path: /customer
+    context-path: /cust
 spring:
   application:
     name: xl-customer-center

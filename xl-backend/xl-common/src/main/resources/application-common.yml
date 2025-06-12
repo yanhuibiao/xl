@@ -106,7 +106,7 @@ seata:
 #    grouplist:
 #      default: 192.168.224.128:8091
   data-source-proxy-mode: AT
-#  enable-auto-data-source-proxy: true
+  enable-auto-data-source-proxy: false  #这里关闭字段代理数据源避免与shardingsphere冲突，从而查询的是逻辑表
 #  config:    #seata读取配置
 #    type: nacos
 #    nacos:
@@ -123,6 +123,7 @@ seata:
       default-global-transaction-timeout: 6000
     rm:
       report-retry-count: 5
+      table-meta-check-enable: false  # 禁用元数据检查
 springdoc:
   api-docs:
     path: /api-docs

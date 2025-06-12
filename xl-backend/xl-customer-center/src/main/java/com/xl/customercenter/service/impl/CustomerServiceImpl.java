@@ -3,6 +3,7 @@ package com.xl.customercenter.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xl.common.annotation.SmsAnnotation;
 import com.xl.common.dubbo.api.CustomerService;
 import com.xl.common.dubbo.api.TradeAccountService;
 import com.xl.common.dubbo.entity.Customer;
@@ -15,9 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.seata.spring.annotation.GlobalTransactional;
+import org.apache.shardingsphere.transaction.annotation.ShardingSphereTransactionType;
+import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +53,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
      * name 事务名称
      */
     @Override
+    @SmsAnnotation(msg = "customer register successful!",msisdn = "10086")
     @GlobalTransactional(name = "customer-register-tx", rollbackFor = Exception.class)
     public Map<String, Object> registerCustomer(Customer customer) {
         // 检查用户名是否已存在
