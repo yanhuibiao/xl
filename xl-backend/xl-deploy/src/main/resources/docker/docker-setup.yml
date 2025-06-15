@@ -72,4 +72,4 @@ jobs:
         docker pull nginx:latest
         docker run --name nginx -d -p 80:80 nginx:latest
 
-    # Add more components as needed as
+    # Add more components as needed ass
