@@ -292,12 +292,6 @@
                 <artifactId>jackson-dataformat-xml</artifactId>
                 <version>${fastjson.dataformat.version}</version>
             </dependency>
-<!--            原来的sleuth，用于调用链追踪-->
-<!--            <dependency>-->
-<!--                <groupId>io.micrometer</groupId>-->
-<!--                <artifactId>micrometer-tracing</artifactId>-->
-<!--                <version>${micrometer.version}</version>-->
-<!--            </dependency>-->
             <!--            dubbo-->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
