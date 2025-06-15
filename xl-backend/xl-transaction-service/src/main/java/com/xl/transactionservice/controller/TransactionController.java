@@ -111,7 +111,7 @@ public class TransactionController {
             return ResponseEntity.errorResult(401,"Account not active");
         }
         return ResponseEntity.okResult(
-                tradeAccountService.updateAccountBalance(tradeAccount, tradeAccount.getBalance().add(amount)));
+                tradeAccountService.updateAccount(tradeAccount.setBalance(tradeAccount.getBalance().add(amount))));
     }
 
 }

@@ -65,8 +65,18 @@ public class TradeAccountServiceImpl extends ServiceImpl<TradeAccountMapper,Trad
         UpdateWrapper<TradeAccount> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("account_no", tradeAccount.getAccountNo()).set("frozen_amount", amount);
         // 如果entry类set字段的属性有值，还是以updateWrapper的set优先
-        tradeAccountMapper.update(tradeAccount.setSignature(null), updateWrapper);
+//        tradeAccountMapper.update(tradeAccount.setSignature(null), updateWrapper);
+        tradeAccountMapper.update(updateWrapper);   // 避免更新余额将余额,不传实体update
         return getTradeAccountByAccountNo(tradeAccount.getAccountNo());
+    }
+
+    @Override
+    public TradeAccount updateAccount(TradeAccount tradeAccount) {
+        UpdateWrapper<TradeAccount> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("account_no", tradeAccount.getAccountNo());
+        // 自动填充签名
+        tradeAccountMapper.update(tradeAccount.setSignature(null), updateWrapper);
+        return null;
     }
 
 } 

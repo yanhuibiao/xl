@@ -65,6 +65,7 @@
         <kafka.client.version>2.5.1</kafka.client.version>
         <lang3.version>3.12.0</lang3.version>
         <lombok.version>1.18.30</lombok.version>
+        <micrometer.version>1.5.0</micrometer.version>
         <mysql.version>8.0.33</mysql.version>
         <mybatis.version>3.5.16</mybatis.version>
         <mybatis.spring.version>3.0.3</mybatis.spring.version>
@@ -291,6 +292,12 @@
                 <artifactId>jackson-dataformat-xml</artifactId>
                 <version>${fastjson.dataformat.version}</version>
             </dependency>
+<!--            原来的sleuth，用于调用链追踪-->
+<!--            <dependency>-->
+<!--                <groupId>io.micrometer</groupId>-->
+<!--                <artifactId>micrometer-tracing</artifactId>-->
+<!--                <version>${micrometer.version}</version>-->
+<!--            </dependency>-->
             <!--            dubbo-->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>

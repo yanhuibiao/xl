@@ -16,4 +16,6 @@ public interface TradeAccountService extends IService<TradeAccount> {
     TradeAccount updateAccountBalance(TradeAccount tradeAccount, BigDecimal amount);
 
     TradeAccount updateAccountFrozenAmount(TradeAccount tradeAccount, BigDecimal amount);
+
+    TradeAccount updateAccount(TradeAccount tradeAccount);
 }

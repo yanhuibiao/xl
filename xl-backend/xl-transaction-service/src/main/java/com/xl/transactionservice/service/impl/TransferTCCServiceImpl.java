@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class TransferTCCServiceImpl implements TransferTCCService {
@@ -58,11 +59,10 @@ public class TransferTCCServiceImpl implements TransferTCCService {
             throw new BusinessException(401,"The balance is insufficient");
         }
         // 更新debit的余额
-        tradeAccountService.updateAccountBalance(debitAccount, debitAccount.getBalance().subtract(amount));
-        // 更新debit的冻结金额
-        tradeAccountService.updateAccountFrozenAmount(debitAccount, debitAccount.getFrozenAmount().add(amount));
+        tradeAccountService.updateAccount(debitAccount.setBalance(debitAccount.getBalance().subtract(amount))
+                .setFrozenAmount(debitAccount.getFrozenAmount().add(amount)));
         // 更新credit的余额
-        tradeAccountService.updateAccountBalance(creditAccount, creditAccount.getBalance().add(amount));
+        tradeAccountService.updateAccount(creditAccount.setBalance(creditAccount.getBalance().add(amount)));
         // 创建订单
         TradeOrder tradeOrder = tradeOrderService.createTradeOrder(debitAccount,creditAccount,amount,TradeOrder.OrderStatus.PAYING);
         // 生成流水
@@ -83,11 +83,11 @@ public class TransferTCCServiceImpl implements TransferTCCService {
         tradeOrder.setOrderStatus(TradeOrder.OrderStatus.COMPLETE);
         tradeOrderService.updateTradeOrder(tradeOrder);
         // 从事务上下文中获取参数
-        TradeAccount debitAccount = JSON.parseObject(((JSONObject) context.getActionContext("debitAccount")).toJSONString(), TradeAccount.class);
+        TradeAccount debitAccount = JSON.parseObject(((JSONObject) Objects.requireNonNull(context.getActionContext("debitAccount"))).toJSONString(), TradeAccount.class);
         debitAccount = tradeAccountService.getTradeAccountByAccountNo(debitAccount.getAccountNo());
         // 减去冻结金额
         debitAccount.setFrozenAmount(debitAccount.getFrozenAmount().subtract((BigDecimal) context.getActionContext("amount")));
-        tradeAccountService.updateAccountFrozenAmount(debitAccount, debitAccount.getFrozenAmount());
+        tradeAccountService.updateAccount(debitAccount);
         // 修改临时事务表状态为comfirm
         tempTransaction.setStatus(TempTransaction.TempTransactionstatus.CONFIRM);
         tempTransactionService.updateTempTransaction(tempTransaction);
@@ -115,12 +115,11 @@ public class TransferTCCServiceImpl implements TransferTCCService {
         TradeAccount creditAccount = JSON.parseObject(((JSONObject) context.getActionContext("creditAccount")).toJSONString(), TradeAccount.class);
         debitAccount = tradeAccountService.getTradeAccountByAccountNo(debitAccount.getAccountNo());
         creditAccount = tradeAccountService.getTradeAccountByAccountNo(creditAccount.getAccountNo());
-        // 回滚debit的余额
-        tradeAccountService.updateAccountBalance(debitAccount, debitAccount.getBalance().add(amount));
-        // 回滚debit的冻结金额
-        tradeAccountService.updateAccountFrozenAmount(debitAccount, debitAccount.getFrozenAmount().subtract(amount));
+        // 回滚debit的余额和冻结金额
+        tradeAccountService.updateAccount(debitAccount.setBalance(debitAccount.getBalance().add(amount))
+                .setFrozenAmount(debitAccount.getFrozenAmount().subtract(amount)));
         // 回滚credit的余额
-        tradeAccountService.updateAccountBalance(creditAccount, creditAccount.getBalance().subtract(amount));
+        tradeAccountService.updateAccount(creditAccount.setBalance(creditAccount.getBalance().subtract(amount)));
         // 回滚订单,生成cancel的订单
         TradeOrder tradeOrder = tradeOrderService.getTradeOrderByOrderNo(tempTransaction.getContext());
         tradeOrder.setOrderStatus(TradeOrder.OrderStatus.CANCEL);

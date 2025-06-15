@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@Accessors(chain = true)  //get、set方法返回对象可以继续链式编程
 @TableName("trade_account")
 public class TradeAccount extends BasePojo {
 
