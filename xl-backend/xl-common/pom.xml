@@ -202,6 +202,7 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
             <version>3.5.0</version>
         </dependency>
+<!--        使用起步依赖，不使用这个-->
 <!--        <dependency>-->
 <!--            <groupId>com.rabbitmq</groupId>-->
 <!--            <artifactId>amqp-client</artifactId>-->
