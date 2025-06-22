@@ -3,7 +3,6 @@ package com.xl.identitybiz.service;
 import com.github.gavlyukovskiy.boot.jdbc.decorator.DecoratedDataSource;
 import com.xl.common.config.autoconfig.properties.SmsProperties;
 import com.xl.common.utils.RabbitMQUtil;
-import com.xl.identitybiz.smsservice.service.SmsWebSocketService;
 import org.apache.shardingsphere.driver.jdbc.core.datasource.ShardingSphereDataSource;
 import org.apache.shardingsphere.infra.metadata.ShardingSphereMetaData;
 import org.apache.shardingsphere.mode.manager.ContextManager;
@@ -28,8 +27,6 @@ class XlIdentityBizServiceApplicationTests {
     @Autowired
     RabbitMQUtil rabbitMQUtil;
     PasswordEncoder passwordEncoder;
-    @Autowired
-    SmsWebSocketService smsWebSocketService;
     @Autowired
     private DataSource dataSource;  // ShardingSphere 代理数据源
 //    @Autowired

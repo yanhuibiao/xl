@@ -221,5 +221,15 @@
 <!--                <directory>src/main/resources</directory>-->
 <!--            </resource>-->
 <!--        </resources>-->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- xl-common是公共依赖库（无main方法），在pom.xml中跳过插件执行，跳过此模块的repackage -->
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>
