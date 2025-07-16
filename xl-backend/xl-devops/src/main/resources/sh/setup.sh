@@ -34,12 +34,12 @@ sleep 30 # 等待 MySQL 初始化
 
 # 初始化数据库
 docker exec -i mysql mysql -uroot -proot <<EOF
-$(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_users.sql)
-$(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_transactions.sql)
-$(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_products.sql)
-$(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_orders.sql)
-$(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_risk_checks.sql)
-$(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_notifications.sql)
+$(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_users.sql)
+$(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_transactions.sql)
+$(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_products.sql)
+$(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_orders.sql)
+$(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_risk_checks.sql)
+$(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_notifications.sql)
 EOF
 
 # 拉取并运行 Redis

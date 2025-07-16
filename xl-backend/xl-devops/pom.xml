@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>xl-deploy</artifactId>
+    <artifactId>xl-devops</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

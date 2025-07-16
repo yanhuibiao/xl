@@ -49,12 +49,12 @@ jobs:
     - name: Initialize Database
       run: |
         docker exec -i mysql mysql -uroot -proot <<EOF
-        $(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_users.sql)
-        $(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_transactions.sql)
-        $(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_products.sql)
-        $(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_orders.sql)
-        $(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_risk_checks.sql)
-        $(cat xl-backend/xl-deploy/src/main/resources/ddl/ddl_notifications.sql)
+        $(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_users.sql)
+        $(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_transactions.sql)
+        $(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_products.sql)
+        $(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_orders.sql)
+        $(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_risk_checks.sql)
+        $(cat xl-backend/xl-devops/src/main/resources/ddl/ddl_notifications.sql)
         EOF
 
     - name: Pull and Run Redis

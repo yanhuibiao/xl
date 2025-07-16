@@ -7,7 +7,7 @@
         <module>xl-gateway</module>
         <module>xl-common</module>
         <module>xl-identity-business</module>
-        <module>xl-deploy</module>
+        <module>xl-devops</module>
         <module>xl-transaction-service</module>
         <module>xl-customer-center</module>
         <module>xl-account-core</module>
