@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "https://gitee.com/yanhuibiao/xl.git"               // Docker 镜像仓库
+        HARBOR_REGISTRY = "192.168.224.128:8082"               // Docker 镜像仓库
         IMAGE_NAME = "your-project-name"             // 镜像名称
         DOCKER_CREDENTIALS_ID = "docker-credentials" // Jenkins 中的凭据 ID
         KUBECONFIG_CREDENTIALS_ID = "kubeconfig"     // K8s 凭据 ID
@@ -89,7 +89,7 @@ pipeline {
                 script {
                     // 使用shell命令查找所有JAR文件并获取文件名(不带路径),tr -d "[]"去除中括号
                     def jarPaths = sh(
-                            script: 'find "./docker" -type f -name "xl-*.jar" -exec dirname {} \\;| sort | uniq | tr -d "[]"',
+                            script: 'find "./docker" -type f -name "xl-*.jar" -exec dirname {} \\;| sort | uniq | tr -d "[" | tr -d "]"',
                             returnStdout: true
                     ).trim().split('\n')
                     // 将JAR文件列表保存到环境变量中供后续阶段使用,删除目录中./docker/
@@ -110,16 +110,19 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    sh "docker login -u admin -p admin ${env.HARBOR_REGISTRY}"
                     if (params.PROJECT_MODULE == "all") {
                         // 分割模块列表
                         def jar_package = env.JAR_FILES.split(',')
-                        // 构建所有模块
+                        // 构建所有模块 ./docker/参数用来指定上下文，Dockerfile中的copy等命令需要在这个目录下
                         jar_package.each { jar ->
-                            echo jar
+                            def jarName = jar.trim().replace('[','').replace(']','')
+                            sh "docker build -f ./xl-backend/xl-devops/src/main/resources/docker/build/Dockerfile -t ${env.HARBOR_REGISTRY}/xl/${jarName}:${params.IMAGE_TAG} ./docker/${jarName}/"
+                            sh "docker push ${env.HARBOR_REGISTRY}/xl/${jarName}:${params.IMAGE_TAG}"
                         }
                     } else {
                         // 构建指定模块
-                        sh "docker build -f ./xl-backend/xl-deploy/src/main/resources/docker/build/Dockerfile -t ${params.PROJECT_MODULE}:${params.IMAGE_TAG} ./docker/"
+                        sh "docker build -f ./xl-backend/xl-devops/src/main/resources/docker/build/Dockerfile -t ${HARBOR_REGISTRY}/xl/${params.PROJECT_MODULE}:${params.IMAGE_TAG} ./docker/${params.PROJECT_MODULE}/"
                     }
                 }
             }
@@ -127,13 +130,8 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: KUBECONFIG_CREDENTIALS_ID, variable: 'KUBECONFIG')]) {
-                    sh '''
-                        export KUBECONFIG=$KUBECONFIG
-                        kubectl set image deployment/${IMAGE_NAME} ${IMAGE_NAME}=${REGISTRY}/${IMAGE_NAME}:${VERSION} -n your-namespace
-                        kubectl rollout status deployment/${IMAGE_NAME} -n your-namespace
-                    '''
-                }
+                // 通过public over ssh:Send files or execute commands over SSH.需要先在全局配置中配置
+                sshPublisher(publishers: [sshPublisherDesc(configName: '192.168.224.130', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: 'xl-backend/xl-devops/src/main/resources/k8s/*.yml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
     }
