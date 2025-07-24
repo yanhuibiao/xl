@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: xl-test
+---
+# 1. Deployment 配置（定义应用副本和容器模板）
+apiVersion: apps/v1          # 使用 apps/v1 API 版本[1,6](@ref)
+kind: Deployment             # 资源类型为 Deployment[2](@ref)
+metadata:
+  namespace: xl-test
+  name: xl-gateway-deployment     # Deployment 名称[2](@ref)
+  labels:                    # 自定义标签（可选）
+    app: xl-gateway
+    env: production
+spec:
+  replicas: 1                # 指定 Pod 副本数为 3[1](@ref)
+  selector:                  # 选择器匹配 Pod 标签[3](@ref)
+    matchLabels:
+      app: xl-gateway
+#  strategy:
+#    type: RollingUpdate      # 滚动更新策略[6](@ref)
+#    rollingUpdate:
+#      maxSurge: 1            # 更新期间允许超出副本数的最大值
+#      maxUnavailable: 0      # 更新期间不可用副本的最大数量
+  template:                  # Pod 模板定义[2](@ref)
+    metadata:
+      labels:                # Pod 标签需与 selector 匹配[3](@ref)
+        app: xl-gateway
+    spec:
+      containers:
+        - name: xl-gateway-pod           # 容器名称[6](@ref)
+          image: 192.168.224.128:8082/xl/xl-gateway:0.0.1-SNAPSHOT    # 容器镜像及版本[2](@ref)
+          imagePullPolicy: Always  #镜像拉取策略
+          ports:
+            - containerPort: 18080   # 容器暴露端口[1](@ref)
+          resources:           # 资源限制（可选）[1](@ref)
+            requests:
+              cpu: "100m"      # 请求 0.1 核 CPU
+              memory: "128Mi"   # 请求 128MB 内存
+            limits:
+              cpu: "500m"      # 限制 0.5 核 CPU
+              memory: "256Mi"   # 限制 256MB 内存
+          volumeMounts:        # 挂载卷配置（可选）[1](@ref)
+            - name: gateway-logs
+              mountPath: /var/log/gateway
+      volumes:               # 存储卷定义[1](@ref)
+        - name: gateway-logs
+          hostPath:            # 使用主机路径挂载
+            path: /data/gateway-logs
+            type: DirectoryOrCreate  # 目录不存在时自动创建[1](@ref)
+      tolerations:  # 若需将 Pod 调度到 Master 节点，必须在 Pod 或 Deployment 的配置中显式声明容忍该污点
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+---
+# 2. Service 配置（暴露服务到集群内外）
+apiVersion: v1               # Service 使用 v1 API[3](@ref)
+kind: Service                # 资源类型为 Service[2](@ref)
+metadata:
+  name: xl-gateway-service       # Service 名称[3](@ref)
+  namespace: xl-test
+spec:
+  type: NodePort             # 服务类型（ClusterIP/NodePort/LoadBalancer）[3](@ref)
+  selector:                  # 选择器匹配 Pod 标签[6](@ref)
+    app: xl-gateway
+  ports:
+    - name: http               # 端口名称[3](@ref)
+      protocol: TCP            # 协议类型[6](@ref)
+      port: 18080                 # Service 端口
+      nodePort: 18080         #对外暴露的port
+      targetPort: 18080
